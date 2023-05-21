@@ -1,82 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="#1A1B22"
-    android:padding="20dp">
+    android:background="@color/main_screen_background"
+    android:padding="16dp">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:text="Вопрос:"
+        android:text="Playlist maker"
         android:textColor="#ffffff"
-        android:textSize="20sp" />
+        android:textSize="22sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:text="2/10"
-        android:textColor="#ffffff"
-        android:textSize="20sp" />
 
-    </FrameLayout>
+       <Button
+           android:layout_marginTop="40dp"
+           android:layout_width="match_parent"
+           android:layout_weight="1"
+           android:backgroundTint="#ffffff"
+           android:text="Поиск"
+           android:textColor="@color/btn_content"
+           android:layout_height="0dp"
+           android:textSize="22sp"
+           app:cornerRadius="16dp"
 
-    <ImageView
+           app:iconGravity="textStart"
+           app:icon="@drawable/ic_search"
+           app:iconPadding="10dp"
+           app:iconTint="@color/btn_content"/>
+
+
+    <Button
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="20dp"
         android:layout_weight="1"
-        android:scaleType="centerCrop"
-        android:src="@drawable/poster"/>
+        android:backgroundTint="#ffffff"
+        android:text="Медиатека"
+        android:textColor="@color/btn_content"
+        android:layout_height="0dp"
+        android:textSize="22sp"
+        app:cornerRadius="16dp"
 
+        app:iconGravity="textStart"
+        app:icon="@drawable/ic_library"
+        app:iconPadding="10dp"
+        app:iconTint="@color/btn_content"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginHorizontal="63dp"
-        android:layout_marginTop="33dp"
-        android:layout_gravity="center"
-        android:text="Рейтинг этого фильма больше, чем 9?:"
-        android:textColor="#ffffff"
-        android:textStyle="bold"/>
-
-    <LinearLayout
+    <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="33dp"
-        android:orientation="horizontal">
+        android:layout_weight="1"
+        android:backgroundTint="#ffffff"
+        android:text="Настройки"
+        android:textColor="@color/btn_content"
+        android:layout_height="0dp"
+        android:textSize="22sp"
+        app:cornerRadius="16dp"
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="1"
-            android:backgroundTint="#ffffff"
-            android:text="Нет"
-            android:textColor="#1A1B22" />
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="10dp"
-            android:layout_weight="1"
-            android:backgroundTint="#ffffff"
-            android:text="Да"
-            android:textColor="#1A1B22" />
-
-
-
+        app:iconGravity="textStart"
+        app:icon="@drawable/ic_settings"
+        app:iconPadding="10dp"
+        app:iconTint="@color/btn_content"/>
 
     </LinearLayout>
 
-
-</LinearLayout>

@@ -2,7 +2,6 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -14,36 +13,40 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:text="Playlist maker"
-        android:textColor="#ffffff"
-        android:textSize="22sp" />
+        android:textColor="@color/white"
+        android:textSize="@dimen/main_screen_text_size" />
 
 
-       <Button
-           android:layout_marginTop="40dp"
-           android:layout_width="match_parent"
-           android:layout_weight="1"
-           android:backgroundTint="#ffffff"
-           android:text="Поиск"
-           android:textColor="@color/btn_content"
-           android:layout_height="0dp"
-           android:textSize="22sp"
-           app:cornerRadius="16dp"
+   <Button
+       android:id="@+id/bt_main_search"
+       android:layout_marginTop="40dp"
+       android:layout_width="match_parent"
+       android:layout_weight="1"
+       android:backgroundTint="#ffffff"
+       android:text="Поиск"
+       android:textColor="@color/btn_content"
+       android:layout_height="0dp"
+       android:layout_marginBottom="8dp"
+       android:textSize="@dimen/main_screen_text_size"
+       app:cornerRadius="@dimen/main_bt_corner_radius"
 
-           app:iconGravity="textStart"
-           app:icon="@drawable/ic_search"
-           app:iconPadding="10dp"
-           app:iconTint="@color/btn_content"/>
+       app:iconGravity="textStart"
+       app:icon="@drawable/ic_search"
+       app:iconPadding="10dp"
+       app:iconTint="@color/btn_content"/>
 
 
     <Button
+        android:id="@+id/bt_main_library"
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:backgroundTint="#ffffff"
         android:text="Медиатека"
         android:textColor="@color/btn_content"
         android:layout_height="0dp"
-        android:textSize="22sp"
-        app:cornerRadius="16dp"
+        android:layout_marginBottom="8dp"
+        android:textSize="@dimen/main_screen_text_size"
+        app:cornerRadius="@dimen/main_bt_corner_radius"
 
         app:iconGravity="textStart"
         app:icon="@drawable/ic_library"
@@ -51,14 +54,15 @@
         app:iconTint="@color/btn_content"/>
 
     <Button
+        android:id="@+id/bt_main_settings"
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:backgroundTint="#ffffff"
         android:text="Настройки"
         android:textColor="@color/btn_content"
         android:layout_height="0dp"
-        android:textSize="22sp"
-        app:cornerRadius="16dp"
+        android:textSize="@dimen/main_screen_text_size"
+        app:cornerRadius="@dimen/main_bt_corner_radius"
 
         app:iconGravity="textStart"
         app:icon="@drawable/ic_settings"

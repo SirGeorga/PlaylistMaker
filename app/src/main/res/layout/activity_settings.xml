@@ -1,102 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp">
-        <LinearLayout
+        android:padding="@dimen/common_padding_16">
+
+        <TextView
+            android:id="@+id/bt_settings_back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
             android:layout_marginTop="14dp"
             android:layout_marginBottom="40dp"
-            android:orientation="horizontal">
-            <ImageView
-                android:id="@+id/bt_settings_back"
-                android:layout_height="16dp"
-                android:layout_width="16dp"
-                android:layout_gravity="start"
-                android:src="@drawable/ic_arrow_back" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/st_settings"
-                android:textColor="@color/black"
-                android:layout_marginStart="28dp"
-                android:textSize="@dimen/main_screen_text_size" />
-        </LinearLayout>
-        <FrameLayout
+            android:drawablePadding="28dp"
+            android:text="@string/st_settings"
+            android:textColor="@color/black"
+            android:textSize="@dimen/main_screen_text_size"
+            app:drawableStartCompat="@drawable/ic_arrow_back" />
+
+        <androidx.appcompat.widget.SwitchCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="21dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="@string/st_dark_theme"
-                android:textColor="@color/black"
-                android:textSize="@dimen/settings_content_text_size" />
-            <Switch
-                android:layout_height="25dp"
-                android:layout_width="50dp"
-                android:layout_gravity="end">
-            </Switch>
-        </FrameLayout>
-        <FrameLayout
+            android:layout_marginVertical="@dimen/main_bt_margin_bottom"
+            android:text="@string/st_dark_theme"
+            android:textColor="@color/black"
+            android:textSize="@dimen/settings_content_text_size" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="21dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="@string/st_share"
-                android:textColor="@color/black"
-                android:textSize="@dimen/settings_content_text_size" />
-            <ImageView
-                android:layout_height="18dp"
-                android:layout_width="16dp"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_share"/>
-        </FrameLayout>
-        <FrameLayout
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginVertical="@dimen/settings_bt_margin_vertical"
+            android:text="@string/st_share"
+            android:textColor="@color/black"
+            android:textSize="@dimen/settings_content_text_size"
+            app:drawableEndCompat="@drawable/ic_share" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="21dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="@string/st_support"
-                android:textColor="@color/black"
-                android:textSize="@dimen/settings_content_text_size" />
-            <ImageView
-                android:layout_height="18dp"
-                android:layout_width="20dp"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_support"/>
-        </FrameLayout>
-        <FrameLayout
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginVertical="@dimen/settings_bt_margin_vertical"
+            android:text="@string/st_support"
+            android:textColor="@color/black"
+            android:textSize="@dimen/settings_content_text_size"
+            app:drawableEndCompat="@drawable/ic_support" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="21dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="@string/st_user_agreement"
-                android:textColor="@color/black"
-                android:textSize="@dimen/settings_content_text_size" />
-            <ImageView
-                android:layout_height="14dp"
-                android:layout_width="8dp"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_arrow_forward"/>
-        </FrameLayout>
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginVertical="@dimen/settings_bt_margin_vertical"
+            android:text="@string/st_user_agreement"
+            android:textColor="@color/black"
+            android:textSize="@dimen/settings_content_text_size"
+            app:drawableEndCompat="@drawable/ic_arrow_forward" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

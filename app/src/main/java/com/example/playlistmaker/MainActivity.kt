@@ -1,6 +1,5 @@
 package com.example.playlistmaker
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,7 +9,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         val settingsButton = findViewById<Button>(R.id.bt_main_settings)
         val libraryButton = findViewById<Button>(R.id.bt_main_library)
@@ -30,7 +28,6 @@ class MainActivity : AppCompatActivity() {
             val displayIntent = Intent(this, SearchActivity::class.java)
             startActivity(displayIntent)
         }
-
 
 
     }

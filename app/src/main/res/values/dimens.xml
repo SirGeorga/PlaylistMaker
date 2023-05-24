@@ -3,4 +3,9 @@
     <dimen name="main_screen_text_size">22sp</dimen>
     <dimen name="settings_content_text_size">16sp</dimen>
     <dimen name="main_bt_corner_radius">16dp</dimen>
+    <dimen name="settings_bt_margin_vertical">20dp</dimen>
+    <dimen name="main_bt_icon_padding">8dp</dimen>
+    <dimen name="zero">0dp</dimen>
+    <dimen name="common_padding_16">16dp</dimen>
+    <dimen name="main_bt_margin_bottom">8dp</dimen>
 </resources>

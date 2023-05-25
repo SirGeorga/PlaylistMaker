@@ -8,4 +8,7 @@
     <dimen name="zero">0dp</dimen>
     <dimen name="common_padding_16">16dp</dimen>
     <dimen name="main_bt_margin_bottom">8dp</dimen>
+    <dimen name="settings_items_height">61dp</dimen>
+    <dimen name="top_element_margin_bottom">40dp</dimen>
+    <dimen name="top_element_margin_top">14dp</dimen>
 </resources>

@@ -1,18 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="@color/main_screen_background"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/common_padding_16">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_gravity="start"
+        android:text="@string/st_app_name"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/top_element_margin_top"
+        android:layout_marginBottom="@dimen/top_element_margin_bottom"
+        android:textSize="@dimen/main_screen_text_size" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/bt_main_search"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zero"
+        android:layout_marginBottom="@dimen/main_bt_margin_bottom"
+        android:layout_weight="1"
+        android:backgroundTint="@color/white"
+        android:text="@string/st_search"
+        android:textAllCaps="false"
+        android:textColor="@color/btn_content"
+        android:textSize="@dimen/main_screen_text_size"
+        app:cornerRadius="@dimen/main_bt_corner_radius"
+        app:icon="@drawable/ic_search"
+        app:iconGravity="textStart"
+        app:iconPadding="@dimen/main_bt_icon_padding"
+        app:iconTint="@color/btn_content" />
+
+    <Button
+        android:id="@+id/bt_main_library"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zero"
+        android:layout_marginBottom="@dimen/main_bt_margin_bottom"
+        android:layout_weight="1"
+        android:backgroundTint="@color/white"
+        android:text="@string/st_library"
+        android:textAllCaps="false"
+        android:textColor="@color/btn_content"
+        android:textSize="@dimen/main_screen_text_size"
+        app:cornerRadius="@dimen/main_bt_corner_radius"
+        app:icon="@drawable/ic_library"
+        app:iconGravity="textStart"
+        app:iconPadding="@dimen/main_bt_icon_padding"
+        app:iconTint="@color/btn_content" />
+
+    <Button
+        android:id="@+id/bt_main_settings"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zero"
+        android:layout_marginBottom="@dimen/main_bt_margin_bottom"
+        android:layout_weight="1"
+        android:backgroundTint="@color/white"
+        android:text="@string/st_settings"
+        android:textAllCaps="false"
+        android:textColor="@color/btn_content"
+        android:textSize="@dimen/main_screen_text_size"
+        app:cornerRadius="@dimen/main_bt_corner_radius"
+        app:icon="@drawable/ic_settings"
+        app:iconGravity="textStart"
+        app:iconPadding="@dimen/main_bt_icon_padding"
+        app:iconTint="@color/btn_content" />
+</LinearLayout>

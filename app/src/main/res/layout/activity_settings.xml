@@ -2,60 +2,43 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    >
 
     <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingHorizontal="@dimen/common_padding_16">
+        android:paddingHorizontal="@dimen/common_padding_16"
+        style="@style/SettingsScreenBackgoundStyle">
 
         <TextView
             android:id="@+id/bt_settings_back"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:layout_marginTop="@dimen/top_element_margin_top"
-            android:layout_marginBottom="@dimen/top_element_margin_bottom"
             android:drawablePadding="28dp"
             android:text="@string/st_settings"
-            android:textColor="@color/black"
-            android:textSize="@dimen/main_screen_text_size"
-            app:drawableStartCompat="@drawable/ic_arrow_back" />
+            app:drawableStartCompat="@drawable/ic_arrow_back"
+            style="@style/SettingsHeaderStyle"/>
 
         <androidx.appcompat.widget.SwitchCompat
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/settings_items_height"
-            android:gravity="start|center_vertical"
-            android:text="@string/st_dark_theme"
-            android:textColor="@color/black"
-            android:textSize="@dimen/settings_content_text_size" />
+            style="@style/SettingsItemStyle"
+            android:text="@string/st_dark_theme"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/settings_items_height"
-            android:gravity="start|center_vertical"
+            android:id="@+id/bt_settings_share"
+            style="@style/SettingsItemStyle"
             android:text="@string/st_share"
-            android:textColor="@color/black"
-            android:textSize="@dimen/settings_content_text_size"
             app:drawableEndCompat="@drawable/ic_share" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/settings_items_height"
-            android:gravity="start|center_vertical"
+            android:id="@+id/bt_settings_support"
+            style="@style/SettingsItemStyle"
             android:text="@string/st_support"
-            android:textColor="@color/black"
-            android:textSize="@dimen/settings_content_text_size"
             app:drawableEndCompat="@drawable/ic_support" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/settings_items_height"
-            android:gravity="start|center_vertical"
+            android:id="@+id/bt_settings_agreement"
+            style="@style/SettingsItemStyle"
             android:text="@string/st_user_agreement"
-            android:textColor="@color/black"
-            android:textSize="@dimen/settings_content_text_size"
             app:drawableEndCompat="@drawable/ic_arrow_forward" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

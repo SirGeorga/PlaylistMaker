@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MainScreenBackgoundStyle">
+        <item name="android:background">@color/yp_blue_background</item>
+    </style>
+    <style name="MainHeaderStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/top_element_margin_top</item>
+        <item name="android:layout_marginBottom">@dimen/top_element_margin_bottom</item>
+        <item name="android:textSize">@dimen/main_screen_text_size</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
+    </style>
+    <style name="SettingsHeaderStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/top_element_margin_top</item>
+        <item name="android:layout_marginBottom">@dimen/top_element_margin_bottom</item>
+        <item name="android:textSize">@dimen/main_screen_text_size</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textFontWeight">500</item>
+    </style>
+    <style name="SettingsItemStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/settings_items_height</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/settings_content_text_size_16sp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+    <style name="MainBtnStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/zero</item>
+        <item name="android:layout_marginBottom">@dimen/main_bt_margin_bottom_8dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/yp_black_background</item>
+        <item name="android:textSize">@dimen/main_screen_text_size</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="cornerRadius">@dimen/main_bt_corner_radius</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">@dimen/main_bt_icon_padding</item>
+        <item name="iconTint">@color/btn_content</item>
+        <item name="android:textFontWeight">500</item>
+    </style>
+
+</resources>

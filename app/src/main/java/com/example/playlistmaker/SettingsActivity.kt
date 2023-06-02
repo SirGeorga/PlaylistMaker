@@ -21,20 +21,20 @@ class SettingsActivity : AppCompatActivity() {
         }
         shareButton.setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.putExtra(Intent.EXTRA_TEXT,getString(R.string.AndrPracticumLink))
+            shareIntent.putExtra(Intent.EXTRA_TEXT,getString(R.string.st_practicum_link))
             shareIntent.type = "text/html"
             startActivity(shareIntent)
         }
         supportButton.setOnClickListener {
             val supportIntent = Intent(Intent.ACTION_SENDTO)
             supportIntent.data = Uri.parse("mailto:")
-            supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.DevEmailAdress)))
-            supportIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.MailText))
-            supportIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.MailSubject))
+            supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.st_dev_email)))
+            supportIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.st_mail_text))
+            supportIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.st_mail_subject))
             startActivity(supportIntent)
         }
         agreementButton.setOnClickListener {
-            val browseIntent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.AgreementLink)))
+            val browseIntent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.st_agreement_link)))
             startActivity(browseIntent)
         }
     }

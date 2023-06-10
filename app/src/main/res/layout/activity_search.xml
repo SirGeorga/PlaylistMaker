@@ -1,9 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/SettingsScreenBackgoundStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchActivity">
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/common_padding_16">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/bt_search_back"
+        style="@style/SettingsHeaderStyle"
+        android:layout_gravity="start|center_vertical"
+        android:drawablePadding="28dp"
+        android:text="@string/st_search"
+        app:drawableStartCompat="@drawable/ic_arrow_back" />
+
+    <LinearLayout
+
+        android:id="@+id/search_bar_container"
+        style="@style/EditTextBackgroundStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            style="@style/EditTextSearchIconsStyle"
+            android:paddingVertical="11dp"
+            android:paddingStart="13dp"
+            android:src="@drawable/ic_search" />
+
+        <EditText
+            android:id="@+id/searchEditText"
+            style="@style/EditTextSearchStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:paddingStart="9dp" />
+
+        <ImageView
+            android:id="@+id/clearIcon"
+            style="@style/EditTextSearchIconsStyle"
+            android:paddingVertical="12dp"
+            android:paddingEnd="14dp"
+            android:src="@drawable/ic_clear_search"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>

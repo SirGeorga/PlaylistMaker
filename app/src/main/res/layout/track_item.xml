@@ -2,12 +2,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="61dp"
+    android:layout_height="60dp"
     android:orientation="horizontal">
 
 
     <ImageView
-        android:id="@+id/trackImage"
+        android:id="@+id/ivTrackImage"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_marginTop="8dp"
@@ -18,7 +18,7 @@
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/trackName"
+        android:id="@+id/tvTrackName"
         style="@style/TrackItemNameStyle"
         android:layout_width="@dimen/zero"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/trackAuthor"
+            android:id="@+id/tvTrackAuthor"
             style="@style/TrackItemArtistStyle"
             android:layout_width="@dimen/zero"
             android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
             android:src="@drawable/ic_dot" />
 
         <TextView
-            android:id="@+id/track_time"
+            android:id="@+id/tvTrackLength"
             style="@style/TrackItemArtistStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/vector_button"
+        android:id="@+id/ivTrackButton"
         style="@style/TrackItemIconsStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

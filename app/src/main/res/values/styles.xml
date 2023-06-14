@@ -80,4 +80,14 @@
     <style name="TrackItemIconsStyle">
         <item name="tint">@color/yp_dark_grey</item>
     </style>
+    <style name="SearchPlaceholderTextStyle">
+        <item name="android:textColor">@color/yp_black_background</item>
+    </style>
+    <style name="SearchUpdateButtonStyle" parent="@style/Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="backgroundTint">@color/yp_black_background</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="SearchPlaceholderIconStyle">
+        <item name="android:fillColor">@color/yp_black_background</item>
+    </style>
 </resources>

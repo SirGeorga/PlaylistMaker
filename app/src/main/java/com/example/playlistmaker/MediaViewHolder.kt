@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.icu.text.SimpleDateFormat
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -7,21 +8,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
+import java.util.*
+
 class MediaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private val trackImage: ImageView = itemView.findViewById(R.id.trackImage)
-    private val trackName: TextView = itemView.findViewById(R.id.trackName)
-    private val trackAuthor: TextView = itemView.findViewById(R.id.trackAuthor)
-    private val tracklength: TextView = itemView.findViewById(R.id.track_time)
+    private val trackImage: ImageView = itemView.findViewById(R.id.ivTrackImage)
+    private val trackName: TextView = itemView.findViewById(R.id.tvTrackName)
+    private val trackAuthor: TextView = itemView.findViewById(R.id.tvTrackAuthor)
+    private val trackLength: TextView = itemView.findViewById(R.id.tvTrackLength)
+    private val roundingRadius = 10
 
     fun bind(item: Track) {
         trackName.text = item.trackName
         trackAuthor.text = item.artistName
-        tracklength.text = item.trackTime
+        trackLength.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
         Glide.with(itemView)
             .load(item.artworkUrl100)
             .placeholder(R.drawable.ic_placeholder)
             .centerCrop()
-            .transform(RoundedCorners(10))
+            .transform(RoundedCorners(roundingRadius))
             .into(trackImage)
     }
 }

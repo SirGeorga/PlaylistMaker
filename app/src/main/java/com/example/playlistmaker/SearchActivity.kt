@@ -54,13 +54,8 @@ class SearchActivity : AppCompatActivity() {
         setContentView(R.layout.activity_search)
         val tracksRecyclerView = findViewById<RecyclerView>(R.id.tracksRecyclerView)
 
-        placeHolderLayout = findViewById(R.id.llSearchPlaceholder)
-        placeHolderImage = findViewById(R.id.ivSearchPlaceholderImg)
-        placeHolderText = findViewById(R.id.tvSearchPlaceholderTxt)
-        updateButton = findViewById(R.id.btSearchUpdate)
-        searchEditText = findViewById(R.id.searchEditText)
-        backButton = findViewById(R.id.bt_search_back)
-        clearButton = findViewById(R.id.clearIcon)
+        initViews()
+        initListeners()
 
         mediaAdapter.tracks = tracks
         tracksRecyclerView.adapter = mediaAdapter
@@ -68,6 +63,26 @@ class SearchActivity : AppCompatActivity() {
         if (savedInstanceState != null) {
             searchEditText.setText(savedInstanceState.getString(SEARCH_PHRASE, ""))
         }
+
+        val simpleTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // empty
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                clearButton.isVisible = !s.isNullOrEmpty()
+                searchPhrase = searchEditText.text.toString()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // empty
+            }
+        }
+        searchEditText.addTextChangedListener(simpleTextWatcher)
+    }
+
+    private fun initListeners() {
+
         backButton.setOnClickListener {
             finish()
         }
@@ -91,23 +106,16 @@ class SearchActivity : AppCompatActivity() {
             }
             false
         }
+    }
 
-
-        val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // empty
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                clearButton.isVisible = !s.isNullOrEmpty()
-                searchPhrase = searchEditText.text.toString()
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // empty
-            }
-        }
-        searchEditText.addTextChangedListener(simpleTextWatcher)
+    private fun initViews() {
+        placeHolderLayout = findViewById(R.id.llSearchPlaceholder)
+        placeHolderImage = findViewById(R.id.ivSearchPlaceholderImg)
+        placeHolderText = findViewById(R.id.tvSearchPlaceholderTxt)
+        updateButton = findViewById(R.id.btSearchUpdate)
+        searchEditText = findViewById(R.id.searchEditText)
+        backButton = findViewById(R.id.bt_search_back)
+        clearButton = findViewById(R.id.clearIcon)
     }
 
     private fun searchQuery() {

@@ -59,4 +59,14 @@
     <style name="TrackItemIconsStyle">
         <item name="tint">@color/white</item>
     </style>
+    <style name="SearchPlaceholderTextStyle">
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="SearchUpdateButtonStyle">
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/yp_black_background</item>
+    </style>
+    <style name="SearchPlaceholderIconStyle">
+        <item name="android:fillColor">@color/white</item>
+    </style>
 </resources>

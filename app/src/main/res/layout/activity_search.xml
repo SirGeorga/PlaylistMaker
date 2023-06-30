@@ -38,7 +38,9 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:paddingStart="9dp" />
+            android:imeOptions="actionDone"
+            android:paddingStart="9dp"
+            android:singleLine="true" />
 
         <ImageView
             android:id="@+id/clearIcon"
@@ -54,8 +56,52 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="vertical"
-        tools:listitem="@layout/track_item"
-        tools:itemCount="5"/>
+        android:visibility="visible"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:itemCount="5"
+        tools:listitem="@layout/track_item" />
+
+    <LinearLayout
+        android:id="@+id/llSearchPlaceholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="113dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/ivSearchPlaceholderImg"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_search_no_internet" />
+
+        <TextView
+            android:id="@+id/tvSearchPlaceholderTxt"
+            style="@style/SearchPlaceholderTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/ys_display_medium"
+            android:text="@string/st_no_internet"
+            android:textAlignment="center"
+            android:textSize="19sp" />
+
+        <Button
+            android:id="@+id/btSearchUpdate"
+            style="@style/SearchUpdateButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginTop="34dp"
+            android:fontFamily="@font/ys_display_medium"
+            android:text="Обновить"
+            android:textSize="14sp"
+            android:visibility="visible"
+            app:cornerRadius="54dp"
+            app:textAllCaps="false" />
+
+    </LinearLayout>
+
+
 </LinearLayout>

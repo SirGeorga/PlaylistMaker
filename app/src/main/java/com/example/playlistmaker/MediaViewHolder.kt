@@ -16,11 +16,14 @@ class MediaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackAuthor: TextView = itemView.findViewById(R.id.tvTrackAuthor)
     private val trackLength: TextView = itemView.findViewById(R.id.tvTrackLength)
     private val roundingRadius = 10
+    private var trackId: String = ""
 
     fun bind(item: Track) {
         trackName.text = item.trackName
         trackAuthor.text = item.artistName
         trackLength.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
+        trackId = item.mediaId
+
         Glide.with(itemView)
             .load(item.artworkUrl100)
             .placeholder(R.drawable.ic_placeholder)

@@ -117,7 +117,7 @@
             android:id="@+id/ivSearchPlaceholderImg"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@drawable/ic_search_no_internet" />
+            android:src="@drawable/ic_search_no_item" />
 
         <TextView
             android:id="@+id/tvSearchPlaceholderTxt"

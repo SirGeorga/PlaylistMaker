@@ -1,47 +1,49 @@
 package com.example.playlistmaker
 
-import android.content.SharedPreferences
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
-class SearchHistory(val sharedPreferences: SharedPreferences) {
-    val searchedTrackList = ArrayList<Track>()
-    private val searchListLimit = 10
+class SearchHistory() {
 
-    init {
-        val searchedTrack = sharedPreferences.getString(SEARCHED_TRACKS_LIST_KEY, "").orEmpty()
-        if (searchedTrack.isNotEmpty()) {
-            searchedTrackList.addAll(createTrackListFromJson(searchedTrack))
+    private val savedHistory = App.getSharedPreferences()
+    private val gson = Gson()
+
+    private var counter = 0
+    var searchedTrackList = App.mediaHistoryList
+
+    fun editArray(newHistoryTrack: Track) {
+        val json = ""
+        if (json.isNotEmpty()) {
+            if (searchedTrackList.isEmpty()) {
+                if (savedHistory.contains(SEARCHED_TRACKS_PREF_KEY)) {
+                    val type = object : TypeToken<ArrayList<Track>>() {}.type
+                    searchedTrackList = gson.fromJson(json, type)
+                }
+            }
         }
+        if (searchedTrackList.contains(newHistoryTrack)) {
+            searchedTrackList.remove(newHistoryTrack)
+            searchedTrackList.add(0, newHistoryTrack)
+        } else {
+            if (searchedTrackList.size < 10) searchedTrackList.add(0, newHistoryTrack)
+            else {
+                searchedTrackList.removeAt(9)
+                searchedTrackList.add(0, newHistoryTrack)
+            }
+        }
+        saveHistory()
     }
 
-    fun addNewTrack(track: Track) {
-        if (searchedTrackList.contains(track)) searchedTrackList.remove(track)
-        searchedTrackList.add(0, track)
-
-        if (searchedTrackList.size > searchListLimit) searchedTrackList.removeAt(searchListLimit)
-        sharedPreferences.edit()
-            .putString(
-                SEARCHED_TRACKS_LIST_KEY,
-                createJsonFromTrackList(searchedTrackList.toTypedArray())
-            )
-            .apply()
+    private fun saveHistory() {
+        var json = ""
+        json = gson.toJson(searchedTrackList)
+        savedHistory.edit().clear().putString(SEARCHED_TRACKS_PREF_KEY, json).apply()
+        counter = searchedTrackList.size
     }
 
     fun clearHistory() {
         searchedTrackList.clear()
-        sharedPreferences.edit()
-            .clear()
-            .apply()
-    }
-
-    // метод десерриализует массив объектов Track (в Shared Preference они хранятся в виде json строки)
-    fun createTrackListFromJson(json: String?): Array<Track> {
-        return Gson().fromJson(json, Array<Track>::class.java)
-    }
-
-    // метод серриализует массив объектов Track (переводит в формат json)
-    fun createJsonFromTrackList(srchdTracks: Array<Track>): String {
-        return Gson().toJson(srchdTracks)
+        saveHistory()
     }
 
 }

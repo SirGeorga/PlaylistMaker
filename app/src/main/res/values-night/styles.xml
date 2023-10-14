@@ -69,4 +69,10 @@
     <style name="SearchPlaceholderIconStyle">
         <item name="android:fillColor">@color/white</item>
     </style>
+    <style name="PlayerBackgroudStyle">
+        <item name="android:background">@color/yp_black_background</item>
+    </style>
+    <style name="PlayerTextStyle">
+        <item name="android:textColor">@color/white</item>
+    </style>
 </resources>

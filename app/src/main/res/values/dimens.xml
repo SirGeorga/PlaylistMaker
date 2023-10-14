@@ -13,4 +13,5 @@
     <dimen name="top_element_margin_top">14dp</dimen>
     <dimen name="search_bar_corner_radius_8dp">8dp</dimen>
     <dimen name="artist_text_size_11">11sp</dimen>
+    <dimen name="margin_24">24dp</dimen>
 </resources>

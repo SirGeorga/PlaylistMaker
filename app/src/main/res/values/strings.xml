@@ -15,4 +15,7 @@
     <string name="st_dev_email">fedins.pochta@gmail.com</string>
     <string name="st_no_internet">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="st_nothing_found">Ничего не нашлось</string>
+    <string name="st_clear_search_history">Очистить историю</string>
+    <string name="st_you_searched">Вы искали</string>
+    <string name="st_update">Обновить</string>
 </resources>

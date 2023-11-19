@@ -67,7 +67,7 @@
         <item name="tint">@color/yp_dark_grey</item>
     </style>
     <style name="EditTextBackgroundStyle">
-        <item name="android:background">@drawable/search_bar_backgound_shape_ypgrey</item>
+        <item name="android:background">@drawable/search_bar_backrgound_shape_ypgrey</item>
     </style>
     <style name="TrackItemNameStyle">
         <item name="android:textColor">@color/black</item>

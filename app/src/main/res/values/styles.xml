@@ -67,7 +67,7 @@
         <item name="tint">@color/yp_dark_grey</item>
     </style>
     <style name="EditTextBackgroundStyle">
-        <item name="android:background">@drawable/search_bar_backgound_shape_ypgrey</item>
+        <item name="android:background">@drawable/search_bar_backrgound_shape_ypgrey</item>
     </style>
     <style name="TrackItemNameStyle">
         <item name="android:textColor">@color/black</item>
@@ -90,4 +90,15 @@
     <style name="SearchPlaceholderIconStyle">
         <item name="android:fillColor">@color/yp_black_background</item>
     </style>
+    <style name="PlayerBackgroudStyle">
+        <item name="android:background">@color/white</item>
+    </style>
+    <style name="PlayerTextStyle">
+        <item name="android:textColor">@color/yp_black_background</item>
+    </style>
+    <style name="Circular">
+        <item name="cornerSize">@dimen/search_bar_corner_radius_8dp</item>
+    </style>
+
+
 </resources>

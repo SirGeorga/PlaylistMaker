@@ -22,7 +22,7 @@ class MediaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         trackName.text = item.trackName
         trackAuthor.text = item.artistName
         trackLength.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
-        trackId = item.mediaId
+        trackId = item.trackId
 
         Glide.with(itemView)
             .load(item.artworkUrl100)

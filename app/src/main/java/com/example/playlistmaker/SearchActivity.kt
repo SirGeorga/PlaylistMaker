@@ -1,10 +1,10 @@
 package com.example.playlistmaker
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.inputmethod.EditorInfo
@@ -22,10 +22,10 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-const val SEARCHED_TRACKS_PREFERENCES = "searched_tracks_preferences"
-const val SEARCHED_TRACKS_LIST_KEY = "key_for_searched_tracks_list"
+const val SEARCH_HISTORY_PREFERENCES = "search_history_preferences"
+const val SEARCHED_TRACKS_PREF_KEY = "searched_tracks_list"
 
-class SearchActivity : AppCompatActivity(), MediaAdapter.TrackClickListener {
+class SearchActivity : AppCompatActivity() {
 
     private var searchPhrase: String = ""
     override fun onSaveInstanceState(outState: Bundle) {
@@ -44,19 +44,17 @@ class SearchActivity : AppCompatActivity(), MediaAdapter.TrackClickListener {
     private lateinit var clearHistoryButton: Button
     private lateinit var historyHeader: TextView
     private lateinit var historyScrollView: NestedScrollView
-    private lateinit var searchHistoryObj: SearchHistory
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var sharedPrefChangelistener: SharedPreferences.OnSharedPreferenceChangeListener
+    private lateinit var mediaAdapter: MediaAdapter
+
+    var searchHistoryObj = SearchHistory()
 
     private val iTunesBaseUrl = "https://itunes.apple.com"
     private val retrofit =
         Retrofit.Builder().baseUrl(iTunesBaseUrl).addConverterFactory(GsonConverterFactory.create())
             .build()
     private val iTunesService = retrofit.create(ITunesApi::class.java)
-    private val tracks = ArrayList<Track>()
-    private val historyTracks = ArrayList<Track>()
+    private var tracks = ArrayList<Track>()
 
-    val mediaAdapter = MediaAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,46 +63,16 @@ class SearchActivity : AppCompatActivity(), MediaAdapter.TrackClickListener {
         initViews()
         initListeners()
 
-        updateMediaAdapter(historyTracks)
-        tracksRecyclerView.adapter = mediaAdapter
-        sharedPreferences = getSharedPreferences(SEARCHED_TRACKS_PREFERENCES, MODE_PRIVATE)
-        searchHistoryObj = SearchHistory(sharedPreferences)
-        historyTracks.addAll(searchHistoryObj.searchedTrackList)
-        historyInVisible()
-
-        sharedPrefChangelistener =
-            SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-                if (key == SEARCHED_TRACKS_LIST_KEY) {
-                    val searchedMedia = sharedPreferences?.getString(SEARCHED_TRACKS_LIST_KEY, null)
-                    if (searchedMedia != null) {
-                        historyTracks.clear()
-                        historyTracks.addAll(searchHistoryObj.createTrackListFromJson(searchedMedia))
-                        updateMediaAdapter(historyTracks)
-                    }
-                }
-            }
-
-        clearHistoryButton.setOnClickListener {
-            searchHistoryObj.clearHistory()
-            historyTracks.clear()
-            updateMediaAdapter(historyTracks)
-            historyInVisible()
-        }
-
-        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPrefChangelistener)
-
-        searchEditText.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus && searchEditText.text.isEmpty() && historyTracks.isNotEmpty()) {
-                updateMediaAdapter(historyTracks)
-                historyVisible()
-            } else {
-                historyInVisible()
-            }
-        }
-
         if (savedInstanceState != null) {
             searchEditText.setText(savedInstanceState.getString(SEARCH_PHRASE, ""))
         }
+        searchHistoryObj.loadHistory()
+        mediaAdapter.tracks = tracks
+        tracksRecyclerView.adapter = mediaAdapter
+        historyInVisible()
+    }
+
+    private fun initListeners() {
 
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -114,10 +82,8 @@ class SearchActivity : AppCompatActivity(), MediaAdapter.TrackClickListener {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.isVisible = !s.isNullOrEmpty()
                 searchPhrase = searchEditText.text.toString()
-                showMessage("", 0, false, "")
-
-                if (searchEditText.hasFocus() && s?.isNullOrEmpty() == true && historyTracks.isNotEmpty()) {
-                    updateMediaAdapter(historyTracks)
+                if (searchEditText.hasFocus() && s?.isEmpty() == true && searchHistoryObj.searchedTrackList.isNotEmpty()) {
+                    updateMediaAdapter(searchHistoryObj.searchedTrackList)
                     historyVisible()
                 } else {
                     historyInVisible()
@@ -128,16 +94,29 @@ class SearchActivity : AppCompatActivity(), MediaAdapter.TrackClickListener {
             }
         }
         searchEditText.addTextChangedListener(simpleTextWatcher)
-    }
 
-    private fun updateMediaAdapter(source: ArrayList<Track>) {
-        mediaAdapter.tracks = source
-        mediaAdapter.notifyDataSetChanged()
-    }
+        searchEditText.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus && searchEditText.text.isEmpty() && searchHistoryObj.searchedTrackList.isNotEmpty()) {
+                updateMediaAdapter(searchHistoryObj.searchedTrackList)
+                historyVisible()
+            } else {
+                historyInVisible()
+            }
+        }
 
-    private fun initListeners() {
+        clearHistoryButton.setOnClickListener {
+            searchHistoryObj.clearHistory()
+            tracks.clear()
+            tracks.addAll(searchHistoryObj.searchedTrackList)
+            updateMediaAdapter(tracks)
+            historyInVisible()
+        }
+
         backButton.setOnClickListener {
             finish()
+        }
+        updateButton.setOnClickListener {
+            searchQuery()
         }
         clearButton.setOnClickListener {
             searchEditText.setText("")
@@ -147,9 +126,7 @@ class SearchActivity : AppCompatActivity(), MediaAdapter.TrackClickListener {
             keyboard.hideSoftInputFromWindow(searchEditText.windowToken, 0)
             searchEditText.clearFocus()
         }
-        updateButton.setOnClickListener {
-            searchQuery()
-        }
+
 
         searchEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -161,6 +138,7 @@ class SearchActivity : AppCompatActivity(), MediaAdapter.TrackClickListener {
             false
         }
     }
+
 
     private fun initViews() {
         placeHolderLayout = findViewById(R.id.llSearchPlaceholder)
@@ -174,6 +152,14 @@ class SearchActivity : AppCompatActivity(), MediaAdapter.TrackClickListener {
         historyHeader = findViewById(R.id.tvHistoryHeader)
         clearHistoryButton = findViewById(R.id.bt_clear_search_history)
         historyScrollView = findViewById(R.id.nsvHistory)
+        mediaAdapter = MediaAdapter(tracks, searchHistoryObj)
+    }
+
+
+    private fun updateMediaAdapter(source: ArrayList<Track>) {
+        val copyList = ArrayList(source)
+        mediaAdapter.tracks = copyList
+        mediaAdapter.notifyDataSetChanged()
     }
 
     private fun searchQuery() {
@@ -187,8 +173,21 @@ class SearchActivity : AppCompatActivity(), MediaAdapter.TrackClickListener {
                             tracks.clear()
                             if (response.body()?.results?.isNotEmpty() == true) {
                                 historyScrollView.visibility = View.VISIBLE
+                                Log.d(
+                                    "SearchActivity",
+                                    "ДО ЗАПРОСА = ${searchHistoryObj.searchedTrackList}"
+                                )
                                 tracks.addAll(response.body()?.results!!)
+
+                                Log.d(
+                                    "SearchActivity",
+                                    "МЕЖДУ ЗАПРОСОМ = ${searchHistoryObj.searchedTrackList}"
+                                )
                                 updateMediaAdapter(tracks)
+                                Log.d(
+                                    "SearchActivity",
+                                    "ПОСЛЕ ЗАПРОСА = ${searchHistoryObj.searchedTrackList}"
+                                )
                                 tracksRecyclerView.visibility = View.VISIBLE
                             }
                             if (tracks.isEmpty()) {
@@ -252,12 +251,11 @@ class SearchActivity : AppCompatActivity(), MediaAdapter.TrackClickListener {
     }
 
     private fun historyVisible() {
-        if (historyTracks.isNotEmpty()) {
-            historyScrollView.visibility = View.VISIBLE
-            historyHeader.visibility = View.VISIBLE
-            tracksRecyclerView.visibility = View.VISIBLE
-            clearHistoryButton.visibility = View.VISIBLE
-        }
+        //updateMediaAdapter(searchHistoryObj.searchedTrackList)
+        historyScrollView.visibility = View.VISIBLE
+        historyHeader.visibility = View.VISIBLE
+        tracksRecyclerView.visibility = View.VISIBLE
+        clearHistoryButton.visibility = View.VISIBLE
     }
 
     private fun historyInVisible() {
@@ -269,10 +267,5 @@ class SearchActivity : AppCompatActivity(), MediaAdapter.TrackClickListener {
 
     companion object {
         const val SEARCH_PHRASE = "SEARCH_PHRASE"
-    }
-
-    override fun onTrackClick(track: Track) {
-        searchHistoryObj.addNewTrack(track)
-        historyVisible()
     }
 }

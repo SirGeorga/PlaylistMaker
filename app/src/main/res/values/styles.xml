@@ -96,5 +96,9 @@
     <style name="PlayerTextStyle">
         <item name="android:textColor">@color/yp_black_background</item>
     </style>
+    <style name="Circular">
+        <item name="cornerSize">@dimen/search_bar_corner_radius_8dp</item>
+    </style>
+
 
 </resources>

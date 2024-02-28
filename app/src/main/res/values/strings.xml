@@ -33,4 +33,5 @@
     <string name="st_00_30">00:30</string>
     <string name="st_artist_name">Имя исполнителя</string>
     <string name="st_track_name">Название композиции</string>
+    <string name="st_unknown_cover_url">Unknown Cover</string>
 </resources>

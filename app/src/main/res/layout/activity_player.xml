@@ -35,14 +35,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/trackCover"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginTop="80dp"
             android:src="@drawable/ic_album_placeholder"
-            android:background="@drawable/player_cover_shape"
+            app:shapeAppearanceOverlay="@style/Circular"
             app:layout_constraintDimensionRatio="h, 1:1"
             app:layout_constraintEnd_toStartOf="@+id/rightGuide"
             app:layout_constraintHorizontal_bias="0.411"

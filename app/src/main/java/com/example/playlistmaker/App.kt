@@ -11,8 +11,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         savedHistory = applicationContext.getSharedPreferences(
-            SEARCH_HISTORY_PREFERENCES,
-            Context.MODE_PRIVATE
+            SEARCH_HISTORY_PREFERENCES, Context.MODE_PRIVATE
         )
     }
 

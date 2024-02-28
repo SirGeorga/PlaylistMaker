@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.inputmethod.EditorInfo
@@ -65,6 +66,7 @@ class SearchActivity : AppCompatActivity() {
         if (savedInstanceState != null) {
             searchEditText.setText(savedInstanceState.getString(SEARCH_PHRASE, ""))
         }
+        searchHistoryObj.loadHistory()
         mediaAdapter.tracks = tracks
         tracksRecyclerView.adapter = mediaAdapter
         historyInVisible()
@@ -80,8 +82,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.isVisible = !s.isNullOrEmpty()
                 searchPhrase = searchEditText.text.toString()
-                showMessage("", 0, false, "")
-                if (searchEditText.hasFocus() && s?.isNullOrEmpty() == true && searchHistoryObj.searchedTrackList.isNotEmpty()) {
+                if (searchEditText.hasFocus() && s?.isEmpty() == true && searchHistoryObj.searchedTrackList.isNotEmpty()) {
                     updateMediaAdapter(searchHistoryObj.searchedTrackList)
                     historyVisible()
                 } else {
@@ -105,7 +106,8 @@ class SearchActivity : AppCompatActivity() {
 
         clearHistoryButton.setOnClickListener {
             searchHistoryObj.clearHistory()
-            tracks = searchHistoryObj.searchedTrackList
+            tracks.clear()
+            tracks.addAll(searchHistoryObj.searchedTrackList)
             updateMediaAdapter(tracks)
             historyInVisible()
         }
@@ -150,12 +152,13 @@ class SearchActivity : AppCompatActivity() {
         historyHeader = findViewById(R.id.tvHistoryHeader)
         clearHistoryButton = findViewById(R.id.bt_clear_search_history)
         historyScrollView = findViewById(R.id.nsvHistory)
-        mediaAdapter = MediaAdapter(tracks)
+        mediaAdapter = MediaAdapter(tracks, searchHistoryObj)
     }
 
 
     private fun updateMediaAdapter(source: ArrayList<Track>) {
-        mediaAdapter.tracks = source
+        val copyList = ArrayList(source)
+        mediaAdapter.tracks = copyList
         mediaAdapter.notifyDataSetChanged()
     }
 
@@ -170,8 +173,21 @@ class SearchActivity : AppCompatActivity() {
                             tracks.clear()
                             if (response.body()?.results?.isNotEmpty() == true) {
                                 historyScrollView.visibility = View.VISIBLE
+                                Log.d(
+                                    "SearchActivity",
+                                    "ДО ЗАПРОСА = ${searchHistoryObj.searchedTrackList}"
+                                )
                                 tracks.addAll(response.body()?.results!!)
+
+                                Log.d(
+                                    "SearchActivity",
+                                    "МЕЖДУ ЗАПРОСОМ = ${searchHistoryObj.searchedTrackList}"
+                                )
                                 updateMediaAdapter(tracks)
+                                Log.d(
+                                    "SearchActivity",
+                                    "ПОСЛЕ ЗАПРОСА = ${searchHistoryObj.searchedTrackList}"
+                                )
                                 tracksRecyclerView.visibility = View.VISIBLE
                             }
                             if (tracks.isEmpty()) {
@@ -235,6 +251,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun historyVisible() {
+        //updateMediaAdapter(searchHistoryObj.searchedTrackList)
         historyScrollView.visibility = View.VISIBLE
         historyHeader.visibility = View.VISIBLE
         tracksRecyclerView.visibility = View.VISIBLE

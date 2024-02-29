@@ -98,6 +98,7 @@
             android:backgroundTint="@android:color/transparent"
             android:fillColor="@color/white"
             android:src="@drawable/ic_bt_play"
+            android:hapticFeedbackEnabled="true"
             app:layout_constraintEnd_toStartOf="@+id/favourites"
             app:layout_constraintHorizontal_bias="0.574"
             app:layout_constraintStart_toEndOf="@+id/playlistAddButton"
@@ -115,7 +116,7 @@
             app:layout_constraintTop_toBottomOf="@id/playerArtistName"
             tools:ignore="SpeakableTextPresentCheck" />
         <TextView
-            android:id="@+id/trackTimer"
+            android:id="@+id/tvElapsedTime"
             style="@style/PlayerTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -140,7 +141,7 @@
             android:textColor="@color/yp_dark_grey"
             android:textSize="@dimen/dm_13sp"
             app:layout_constraintStart_toStartOf="@+id/leftGuide"
-            app:layout_constraintTop_toBottomOf="@id/trackTimer"
+            app:layout_constraintTop_toBottomOf="@id/tvElapsedTime"
             tools:ignore="TextContrastCheck" />
 
         <TextView
@@ -214,7 +215,7 @@
             android:textSize="@dimen/dm_13sp"
             app:layout_constraintEnd_toStartOf="@+id/rightGuide"
             app:layout_constraintStart_toEndOf="@id/trackTimeName"
-            app:layout_constraintTop_toBottomOf="@id/trackTimer" />
+            app:layout_constraintTop_toBottomOf="@id/tvElapsedTime" />
 
         <TextView
             android:id="@+id/album"

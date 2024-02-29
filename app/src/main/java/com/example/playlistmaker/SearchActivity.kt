@@ -2,9 +2,10 @@ package com.example.playlistmaker
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.inputmethod.EditorInfo
@@ -27,12 +28,15 @@ const val SEARCHED_TRACKS_PREF_KEY = "searched_tracks_list"
 
 class SearchActivity : AppCompatActivity() {
 
-    private var searchPhrase: String = ""
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH_PHRASE, searchPhrase)
     }
 
+    private val searchRunnable = Runnable { searchQuery() }
+    private val handler = Handler(Looper.getMainLooper())
+    private var searchPhrase: String = ""
     private lateinit var placeHolderLayout: LinearLayout
     private lateinit var tracksRecyclerView: RecyclerView
     private lateinit var placeHolderImage: ImageView
@@ -43,8 +47,9 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchEditText: EditText
     private lateinit var clearHistoryButton: Button
     private lateinit var historyHeader: TextView
-    private lateinit var historyScrollView: NestedScrollView
+    private lateinit var tracksScrollView: NestedScrollView
     private lateinit var mediaAdapter: MediaAdapter
+    private lateinit var progressBar: ProgressBar
 
     var searchHistoryObj = SearchHistory()
 
@@ -88,6 +93,7 @@ class SearchActivity : AppCompatActivity() {
                 } else {
                     historyInVisible()
                 }
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -116,6 +122,7 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
         updateButton.setOnClickListener {
+
             searchQuery()
         }
         clearButton.setOnClickListener {
@@ -151,8 +158,9 @@ class SearchActivity : AppCompatActivity() {
         clearButton = findViewById(R.id.clearIcon)
         historyHeader = findViewById(R.id.tvHistoryHeader)
         clearHistoryButton = findViewById(R.id.bt_clear_search_history)
-        historyScrollView = findViewById(R.id.nsvHistory)
+        tracksScrollView = findViewById(R.id.nsvTracksInterfaceContainer)
         mediaAdapter = MediaAdapter(tracks, searchHistoryObj)
+        progressBar = findViewById(R.id.progressBar)
     }
 
 
@@ -164,34 +172,24 @@ class SearchActivity : AppCompatActivity() {
 
     private fun searchQuery() {
         if (searchEditText.text.isNotEmpty()) {
+            showMessage("",0,false,"")
+            progressBar.visibility = View.VISIBLE
             iTunesService.search(searchEditText.text.toString())
                 .enqueue(object : Callback<SongsSearchResponse> {
                     override fun onResponse(
                         call: Call<SongsSearchResponse>, response: Response<SongsSearchResponse>
                     ) {
+                        progressBar.visibility = GONE
                         if (response.code() == 200) {
                             tracks.clear()
                             if (response.body()?.results?.isNotEmpty() == true) {
-                                historyScrollView.visibility = View.VISIBLE
-                                Log.d(
-                                    "SearchActivity",
-                                    "ДО ЗАПРОСА = ${searchHistoryObj.searchedTrackList}"
-                                )
+                                tracksScrollView.visibility = View.VISIBLE
                                 tracks.addAll(response.body()?.results!!)
-
-                                Log.d(
-                                    "SearchActivity",
-                                    "МЕЖДУ ЗАПРОСОМ = ${searchHistoryObj.searchedTrackList}"
-                                )
                                 updateMediaAdapter(tracks)
-                                Log.d(
-                                    "SearchActivity",
-                                    "ПОСЛЕ ЗАПРОСА = ${searchHistoryObj.searchedTrackList}"
-                                )
                                 tracksRecyclerView.visibility = View.VISIBLE
                             }
                             if (tracks.isEmpty()) {
-                                historyScrollView.visibility = GONE
+                                tracksScrollView.visibility = GONE
                                 showMessage(
                                     getString(R.string.st_nothing_found),
                                     R.drawable.ic_search_no_item,
@@ -202,7 +200,7 @@ class SearchActivity : AppCompatActivity() {
                                 showMessage("", 0, false, "")
                             }
                         } else {
-                            historyScrollView.visibility = GONE
+                            tracksScrollView.visibility = GONE
                             showMessage(
                                 getString(R.string.st_no_internet),
                                 R.drawable.ic_search_no_internet,
@@ -213,6 +211,7 @@ class SearchActivity : AppCompatActivity() {
                     }
 
                     override fun onFailure(call: Call<SongsSearchResponse>, t: Throwable) {
+                        progressBar.visibility = GONE
                         tracks.clear()
                         showMessage(
                             getString(R.string.st_no_internet),
@@ -240,8 +239,10 @@ class SearchActivity : AppCompatActivity() {
             updateMediaAdapter(tracks)
             placeHolderText.text = text
             placeHolderImage.setImageResource(imgRes)
-            if (updBtn) updateButton.visibility = View.VISIBLE
-            else updateButton.visibility = GONE
+            updateButton.visibility = when (updBtn) {
+                true -> View.VISIBLE
+                else -> GONE
+            }
             if (additionalMessage.isNotEmpty()) {
                 Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG).show()
             }
@@ -251,21 +252,26 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun historyVisible() {
-        //updateMediaAdapter(searchHistoryObj.searchedTrackList)
-        historyScrollView.visibility = View.VISIBLE
+        tracksScrollView.visibility = View.VISIBLE
         historyHeader.visibility = View.VISIBLE
         tracksRecyclerView.visibility = View.VISIBLE
         clearHistoryButton.visibility = View.VISIBLE
     }
 
     private fun historyInVisible() {
-        historyScrollView.visibility = GONE
+        tracksScrollView.visibility = GONE
         historyHeader.visibility = GONE
         tracksRecyclerView.visibility = GONE
         clearHistoryButton.visibility = GONE
     }
 
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
     companion object {
         const val SEARCH_PHRASE = "SEARCH_PHRASE"
+        private const val SEARCH_DEBOUNCE_DELAY = 1000L
     }
 }

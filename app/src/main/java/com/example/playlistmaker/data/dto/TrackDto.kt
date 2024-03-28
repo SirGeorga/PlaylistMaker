@@ -1,13 +1,14 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.data.dto
 
 import android.os.Parcelable
+import com.example.playlistmaker.domain.models.Track
 import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 
 @Parcelize
-data class Track(
+data class TrackDto(
     val trackName: String, // Название композиции
     val artistName: String, // Имя исполнителя
     val trackTimeMillis: Int, // Продолжительность трека

@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+.idea/appInsightsSettings.xml
+.idea/kotlinc.xml
+.idea/migrations.xml

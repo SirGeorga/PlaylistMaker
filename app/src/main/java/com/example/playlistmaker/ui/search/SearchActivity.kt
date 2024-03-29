@@ -124,6 +124,7 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
         updateButton.setOnClickListener {
+
             searchQuery()
         }
         clearButton.setOnClickListener {

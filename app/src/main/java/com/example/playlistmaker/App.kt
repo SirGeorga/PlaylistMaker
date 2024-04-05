@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.ui.search.SEARCH_HISTORY_PREFERENCES
 
 class App : Application() {
     var darkTheme = false

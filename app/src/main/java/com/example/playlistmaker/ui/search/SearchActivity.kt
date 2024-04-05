@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.search
 
 import android.content.Context
 import android.os.Bundle
@@ -15,8 +15,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.networkModule.ITunesApi
-import com.example.playlistmaker.networkModule.SongsSearchResponse
+import com.example.playlistmaker.R
+import com.example.playlistmaker.data.network.ITunesApiService
+import com.example.playlistmaker.data.dto.TracksSearchResponse
+import com.example.playlistmaker.domain.models.Track
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -57,7 +59,7 @@ class SearchActivity : AppCompatActivity() {
     private val retrofit =
         Retrofit.Builder().baseUrl(iTunesBaseUrl).addConverterFactory(GsonConverterFactory.create())
             .build()
-    private val iTunesService = retrofit.create(ITunesApi::class.java)
+    private val iTunesService = retrofit.create(ITunesApiService::class.java)
     private var tracks = ArrayList<Track>()
 
 
@@ -175,9 +177,9 @@ class SearchActivity : AppCompatActivity() {
             showMessage("",0,false,"")
             progressBar.visibility = View.VISIBLE
             iTunesService.search(searchEditText.text.toString())
-                .enqueue(object : Callback<SongsSearchResponse> {
+                .enqueue(object : Callback<TracksSearchResponse> {
                     override fun onResponse(
-                        call: Call<SongsSearchResponse>, response: Response<SongsSearchResponse>
+                        call: Call<TracksSearchResponse>, response: Response<TracksSearchResponse>
                     ) {
                         progressBar.visibility = GONE
                         if (response.code() == 200) {
@@ -210,7 +212,7 @@ class SearchActivity : AppCompatActivity() {
                         }
                     }
 
-                    override fun onFailure(call: Call<SongsSearchResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
                         progressBar.visibility = GONE
                         tracks.clear()
                         showMessage(

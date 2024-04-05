@@ -12,4 +12,9 @@
     <color name="yp_black_background">#1A1B22</color>
     <color name="yp_light_grey">#E6E8EB</color>
     <color name="yp_dark_grey">#AEAFB4</color>
+    <color name="yp_switch_blue">#3772E7</color>
+    <color name="yp_switch_light_blue">#9FBBF3</color>
+    <color name="yp_switch_grey">#AEAFB4</color>
+    <color name="yp_switch_light_grey">#E6E8EB</color>
+
 </resources>

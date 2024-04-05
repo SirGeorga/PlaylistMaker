@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.search
 
 import android.content.Intent
 import android.os.Handler
@@ -6,6 +6,10 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.App
+import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.player.PlayerActivity
 import kotlin.collections.ArrayList
 
 class MediaAdapter(var tracks: ArrayList<Track>, private val searchHistoryObj: SearchHistory) :
@@ -15,10 +19,6 @@ class MediaAdapter(var tracks: ArrayList<Track>, private val searchHistoryObj: S
         return MediaViewHolder(view)
     }
 
-    companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
-
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
 
@@ -26,7 +26,7 @@ class MediaAdapter(var tracks: ArrayList<Track>, private val searchHistoryObj: S
         App.getSharedPreferences()
         holder.bind(tracks[position])
         holder.itemView.setOnClickListener {
-            if(clickDebounce()) {
+            if (clickDebounce()) {
                 val intent = Intent(holder.itemView.context, PlayerActivity::class.java).apply {
                     putExtra("track", tracks[position])
                 }
@@ -45,5 +45,9 @@ class MediaAdapter(var tracks: ArrayList<Track>, private val searchHistoryObj: S
             handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
         }
         return current
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }

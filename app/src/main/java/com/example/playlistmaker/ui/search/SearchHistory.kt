@@ -5,6 +5,8 @@ import com.example.playlistmaker.domain.models.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
+private const val historyLimit = 10
+
 class SearchHistory() {
 
     private val savedHistory = App.getSharedPreferences()
@@ -14,8 +16,8 @@ class SearchHistory() {
     fun editArray(newHistoryTrack: Track) {
         if (searchedTrackList.contains(newHistoryTrack)) {
             searchedTrackList.remove(newHistoryTrack)
-        } else if (searchedTrackList.size >= 10) {
-            searchedTrackList.removeAt(9)
+        } else if (searchedTrackList.size >= historyLimit) {
+            searchedTrackList.removeAt(historyLimit - 1)
         }
         searchedTrackList.add(0, newHistoryTrack)
         saveHistory()
@@ -31,6 +33,7 @@ class SearchHistory() {
         val type = object : TypeToken<ArrayList<Track>>() {}.type
         searchedTrackList = gson.fromJson(json, type) ?: ArrayList()
     }
+
     fun clearHistory() {
         searchedTrackList.clear()
         saveHistory()

@@ -19,10 +19,6 @@ class MediaAdapter(var tracks: ArrayList<Track>, private val searchHistoryObj: S
         return MediaViewHolder(view)
     }
 
-    companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
-
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
 
@@ -30,7 +26,7 @@ class MediaAdapter(var tracks: ArrayList<Track>, private val searchHistoryObj: S
         App.getSharedPreferences()
         holder.bind(tracks[position])
         holder.itemView.setOnClickListener {
-            if(clickDebounce()) {
+            if (clickDebounce()) {
                 val intent = Intent(holder.itemView.context, PlayerActivity::class.java).apply {
                     putExtra("track", tracks[position])
                 }
@@ -49,5 +45,9 @@ class MediaAdapter(var tracks: ArrayList<Track>, private val searchHistoryObj: S
             handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
         }
         return current
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }

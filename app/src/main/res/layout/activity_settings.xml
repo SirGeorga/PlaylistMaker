@@ -21,7 +21,7 @@
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/themeSwitcher"
-            style="@style/SettingsItemStyle"
+            style="@style/NightModeSwitchStyle"
             android:text="@string/st_dark_theme"/>
 
         <TextView

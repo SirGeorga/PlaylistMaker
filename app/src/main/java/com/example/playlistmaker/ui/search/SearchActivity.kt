@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.search
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -275,5 +276,9 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val SEARCH_PHRASE = "SEARCH_PHRASE"
         private const val SEARCH_DEBOUNCE_DELAY = 1000L
+
+        fun getIntent(context: Context): Intent {
+            return Intent(context, SearchActivity::class.java)
+        }
     }
 }

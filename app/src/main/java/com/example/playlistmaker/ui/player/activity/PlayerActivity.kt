@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.player
+package com.example.playlistmaker.ui.player.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -81,15 +81,15 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun parseTrack(track: Track) {
-        playerTrackName.text = track.trackName ?: getString(R.string.st_unknown_track)
-        playerArtistName.text = track.artistName ?: getString(R.string.st_unknown_artist)
-        trackTime.text = track.trackTimeNormal ?: getString(R.string.st_00_00)
-        album.text = track.collectionName ?: getString(R.string.st_unknown_album)
-        year.text = track.year ?: getString(R.string.st_unknown_year).take(4)
-        genre.text = track.primaryGenreName ?: getString(R.string.st_unknown_genre)
-        country.text = track.country ?: getString(R.string.st_unknown_country)
-        url = track.previewUrl ?: ""
-        val getImage = track.artworkUrl512 ?: getString(R.string.st_unknown_cover_url)
+        playerTrackName.text = track.trackName
+        playerArtistName.text = track.artistName
+        trackTime.text = track.trackTimeNormal
+        album.text = track.collectionName
+        year.text = track.year
+        genre.text = track.primaryGenreName
+        country.text = track.country
+        url = track.previewUrl
+        val getImage = track.artworkUrl512
         Glide.with(this).load(getImage).placeholder(R.drawable.ic_album_placeholder).into(cover)
     }
 }

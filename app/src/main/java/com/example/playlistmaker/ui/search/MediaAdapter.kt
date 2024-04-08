@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.App
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.presentation.player.PlayerActivity
+import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import kotlin.collections.ArrayList
 
 class MediaAdapter(var tracks: ArrayList<Track>, private val searchHistoryObj: SearchHistory) :

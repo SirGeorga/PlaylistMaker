@@ -15,7 +15,7 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.player.PlayerActivity"
+            android:name=".ui.player.activity.PlayerActivity"
             android:exported="false" />
         <activity
             android:name=".ui.search.SearchActivity"
@@ -24,10 +24,10 @@
             android:name=".ui.library.LibraryActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.settings.SettingsActivity"
+            android:name=".ui.settings.activity.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".ui.main.activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

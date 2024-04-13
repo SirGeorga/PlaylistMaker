@@ -7,7 +7,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
@@ -27,27 +26,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
-import com.example.playlistmaker.search.data.SearchHistory
 import com.example.playlistmaker.search.data.TracksState
 import com.example.playlistmaker.search.domain.model.Track
 import com.example.playlistmaker.search.ui.recycler_view.TracksAdapter
 import com.example.playlistmaker.search.ui.view_model.TrackSearchViewModel
-
-const val SEARCH_HISTORY_PREFERENCES = "search_history_preferences"
-const val SEARCHED_TRACKS_PREF_KEY = "searched_tracks_list"
 
 class SearchActivity : AppCompatActivity() {
 
     private val adapter = TracksAdapter(object : TracksAdapter.TrackClickListener {
         override fun onTrackClick(track: Track) {
             if (searchDebounce()) {
-                Log.d("FUCK", "Пытаемся запустить плеер")
+                viewModel.addTrackToHistory(track)
                 val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
                 intent.putExtra("track", track)
                 startActivity(intent)
             }
         }
     })
+
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -72,10 +68,6 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var textWatcher: TextWatcher
     private var isClickAllowed = true
 
-    var searchHistoryObj = SearchHistory()
-
-    private var tracks = ArrayList<Track>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -91,7 +83,6 @@ class SearchActivity : AppCompatActivity() {
             queryInput.setText(savedInstanceState.getString(SEARCH_PHRASE, ""))
         }
 
-        searchHistoryObj.loadHistory()
         tracksRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         tracksRecyclerView.adapter = adapter
@@ -103,12 +94,33 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 clearButton.isVisible = !s.isNullOrEmpty()
+                searchPhrase = queryInput.text.toString()
+                if (queryInput.hasFocus() && s?.isEmpty() == true && viewModel.getCurrentHistoryList()
+                        .isNotEmpty()
+                ) {
+                    adapter.updateMediaAdapter(viewModel.getCurrentHistoryList())
+                    historyVisible()
+                } else {
+                    historyInVisible()
+                }
+
                 viewModel.searchDebounce(
                     changedText = s?.toString() ?: ""
                 )
             }
 
             override fun afterTextChanged(s: Editable?) {
+            }
+        }
+
+        queryInput.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus && queryInput.text.isEmpty() && viewModel.getCurrentHistoryList()
+                    .isNotEmpty()
+            ) {
+                adapter.updateMediaAdapter(viewModel.getCurrentHistoryList())
+                historyVisible()
+            } else {
+                historyInVisible()
             }
         }
         textWatcher.let { queryInput.addTextChangedListener(it) }
@@ -170,8 +182,6 @@ class SearchActivity : AppCompatActivity() {
 
         if (errorMessage.isNotEmpty()) {
             placeHolderLayout.visibility = VISIBLE
-            tracks.clear()
-            updateMediaAdapter(tracks)
             placeHolderText.text = errorMessage
             placeHolderImage.setImageResource(imgRes)
             updateButton.visibility = when (updBtn) {
@@ -203,43 +213,11 @@ class SearchActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-    private fun initListeners() {/*
-                val simpleTextWatcher = object : TextWatcher {
-                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                        // empty
-                    }
+    private fun initListeners() {
 
-                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                        clearButton.isVisible = !s.isNullOrEmpty()
-                        searchPhrase = searchEditText.text.toString()
-                        if (searchEditText.hasFocus() && s?.isEmpty() == true && searchHistoryObj.searchedTrackList.isNotEmpty()) {
-                            updateMediaAdapter(searchHistoryObj.searchedTrackList)
-                            historyVisible()
-                        } else {
-                            historyInVisible()
-                        }
-                        searchDebounce()
-                    }
-
-                    override fun afterTextChanged(s: Editable?) {
-                    }
-                }
-                searchEditText.addTextChangedListener(simpleTextWatcher)
-
-                searchEditText.setOnFocusChangeListener { v, hasFocus ->
-                    if (hasFocus && searchEditText.text.isEmpty() && searchHistoryObj.searchedTrackList.isNotEmpty()) {
-                        updateMediaAdapter(searchHistoryObj.searchedTrackList)
-                        historyVisible()
-                    } else {
-                        historyInVisible()
-                    }
-                }
-        */
         clearHistoryButton.setOnClickListener {
-            searchHistoryObj.clearHistory()
-            tracks.clear()
-            tracks.addAll(searchHistoryObj.searchedTrackList)
-            updateMediaAdapter(tracks)
+            viewModel.clearHistory()
+            adapter.updateMediaAdapter(viewModel.getCurrentHistoryList())
             historyInVisible()
         }
 
@@ -254,8 +232,6 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener {
             placeHolderLayout.visibility = GONE
             queryInput.setText("")
-            tracks.clear()
-            updateMediaAdapter(tracks)
             val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             keyboard.hideSoftInputFromWindow(queryInput.windowToken, 0)
             queryInput.clearFocus()
@@ -275,7 +251,6 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-
     private fun initViews() {
         placeHolderLayout = findViewById(R.id.llSearchPlaceholder)
         tracksRecyclerView = findViewById(R.id.tracksRecyclerView)
@@ -288,72 +263,8 @@ class SearchActivity : AppCompatActivity() {
         historyHeader = findViewById(R.id.tvHistoryHeader)
         clearHistoryButton = findViewById(R.id.bt_clear_search_history)
         tracksScrollView = findViewById(R.id.nsvTracksInterfaceContainer)
-        //tracksAdapter = TracksAdapter(tracks, searchHistoryObj)
         progressBar = findViewById(R.id.progressBar)
     }
-
-
-    private fun updateMediaAdapter(source: ArrayList<Track>) {
-        val copyList = ArrayList(source)
-        adapter.tracks = copyList
-        adapter.notifyDataSetChanged()
-    }
-
-    /*
-    private fun searchQuery() {
-        if (searchEditText.text.isNotEmpty()) {
-            showMessage("",0,false,"")
-            progressBar.visibility = View.VISIBLE
-            iTunesService.search(searchEditText.text.toString())
-                .enqueue(object : Callback<TracksSearchResponse> {
-                    override fun onResponse(
-                        call: Call<TracksSearchResponse>, response: Response<TracksSearchResponse>
-                    ) {
-                        progressBar.visibility = GONE
-                        if (response.code() == 200) {
-                            tracks.clear()
-                            if (response.body()?.results?.isNotEmpty() == true) {
-                                tracksScrollView.visibility = View.VISIBLE
-                                tracks.addAll(response.body()?.results!!)
-                                updateMediaAdapter(tracks)
-                                tracksRecyclerView.visibility = View.VISIBLE
-                            }
-                            if (tracks.isEmpty()) {
-                                tracksScrollView.visibility = GONE
-                                showMessage(
-                                    getString(R.string.st_nothing_found),
-                                    R.drawable.ic_search_no_item,
-                                    false,
-                                    ""
-                                )
-                            } else {
-                                showMessage("", 0, false, "")
-                            }
-                        } else {
-                            tracksScrollView.visibility = GONE
-                            showMessage(
-                                getString(R.string.st_no_internet),
-                                R.drawable.ic_search_no_internet,
-                                true,
-                                response.code().toString()
-                            )
-                        }
-                    }
-
-                    override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
-                        progressBar.visibility = GONE
-                        tracks.clear()
-                        showMessage(
-                            getString(R.string.st_no_internet),
-                            R.drawable.ic_search_no_internet,
-                            true,
-                            t.message.toString()
-                        )
-                    }
-
-                })
-        }
-    }*/
 
 
     private fun historyVisible() {

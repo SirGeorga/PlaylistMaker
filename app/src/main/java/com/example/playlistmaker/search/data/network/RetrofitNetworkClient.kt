@@ -9,7 +9,7 @@ import com.example.playlistmaker.search.data.dto.TracksSearchRequest
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitNetworkClient (private val context: Context) : NetworkClient {
+class RetrofitNetworkClient(private val context: Context) : NetworkClient {
 
     private val iTunesBaseUrl = "https://itunes.apple.com"
 
@@ -21,7 +21,7 @@ class RetrofitNetworkClient (private val context: Context) : NetworkClient {
     private val iTunesService = retrofit.create(ITunesApiService::class.java)
 
     override fun doRequest(dto: Any): Response {
-        if (!isConnected()){
+        if (!isConnected()) {
             return Response().apply { resultCode = -1 }
         }
         if (dto !is TracksSearchRequest) {
@@ -32,18 +32,20 @@ class RetrofitNetworkClient (private val context: Context) : NetworkClient {
 
         val body = resp.body()
 
-        return if (body != null){
+        return if (body != null) {
             body.apply { resultCode = resp.code() }
         } else {
             Response().apply { resultCode = resp.code() }
         }
     }
 
-    private fun isConnected(): Boolean{
+    private fun isConnected(): Boolean {
         val connectivityManager = context.getSystemService(
-            Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-        if (capabilities != null){
+            Context.CONNECTIVITY_SERVICE
+        ) as ConnectivityManager
+        val capabilities =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        if (capabilities != null) {
             when {
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> return true
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> return true

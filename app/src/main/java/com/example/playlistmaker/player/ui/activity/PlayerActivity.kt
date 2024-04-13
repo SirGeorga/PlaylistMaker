@@ -1,17 +1,17 @@
 package com.example.playlistmaker.player.ui.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.player.ui.PlayerState
-import com.example.playlistmaker.search.domain.model.Track
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
+import com.example.playlistmaker.search.domain.model.Track
 
 class PlayerActivity : AppCompatActivity() {
     private lateinit var playerTrackName: TextView
@@ -37,10 +37,12 @@ class PlayerActivity : AppCompatActivity() {
         val track = intent.getParcelableExtra<Track>("track") as Track
         parseTrack(track)
 
-        viewModel = ViewModelProvider(this, PlayerViewModel.getViewModelFactory(track))[PlayerViewModel::class.java]
+        viewModel = ViewModelProvider(
+            this,
+            PlayerViewModel.getViewModelFactory(track)
+        )[PlayerViewModel::class.java]
 
-        viewModel.getPlayerStatusLiveData().observe(this){
-            playerState ->
+        viewModel.getPlayerStatusLiveData().observe(this) { playerState ->
             changePlayButton(playerState)
             tvElapsedTime.text = playerState.progress
         }
@@ -57,6 +59,7 @@ class PlayerActivity : AppCompatActivity() {
         super.onPause()
         viewModel.pausePlayer()
     }
+
     private fun initViews() {
         playerTrackName = findViewById(R.id.playerTrackName)
         playerArtistName = findViewById(R.id.playerArtistName)
@@ -78,13 +81,6 @@ class PlayerActivity : AppCompatActivity() {
         playButton.setOnClickListener {
             playButton.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
             viewModel.playbackControl()
-
-            /*            if (!playerInteractor.stopWatchStarted && playerInteractor.timeElapse <= 0L) {
-                playerInteractor.handler.removeCallbacksAndMessages(null)
-                playerInteractor.stopWatchStarted = true
-                playerInteractor.handler.post(playerInteractor.startStopwatch())
-            }
-            */
         }
     }
 

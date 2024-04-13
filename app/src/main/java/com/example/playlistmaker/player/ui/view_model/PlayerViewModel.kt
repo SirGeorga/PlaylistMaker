@@ -9,14 +9,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.player.ui.PlayerState
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
+import com.example.playlistmaker.player.ui.PlayerState
 import com.example.playlistmaker.search.domain.model.Track
 
 class PlayerViewModel(
     private val playerInteractor: PlayerInteractor,
     private val track: Track
-): ViewModel() {
+) : ViewModel() {
     private var playerStateLiveData = MutableLiveData<PlayerState>()
     private val handler = Handler(Looper.getMainLooper())
 
@@ -24,17 +24,32 @@ class PlayerViewModel(
         playerInteractor.preparePlayer(
             url = track.previewUrl,
             onPreparedCallback = {
-                PlayerState(progress = "00:00", isPlaying = false, prepared = true, completed = false)
+                PlayerState(
+                    progress = "00:00",
+                    isPlaying = false,
+                    prepared = true,
+                    completed = false
+                )
             },
             onCompleteCallback = {
-                playerStateLiveData.value = getCurrentPlayerState().copy(progress = "00:00", isPlaying = false, prepared = true, completed = true)
+                playerStateLiveData.value = getCurrentPlayerState().copy(
+                    progress = "00:00",
+                    isPlaying = false,
+                    prepared = true,
+                    completed = true
+                )
             }
         )
     }
 
     fun getPlayerStatusLiveData(): LiveData<PlayerState> = playerStateLiveData
     fun getCurrentPlayerState(): PlayerState {
-        return playerStateLiveData.value ?: PlayerState(progress = "00:00", isPlaying = false, prepared = true, completed = false)
+        return playerStateLiveData.value ?: PlayerState(
+            progress = "00:00",
+            isPlaying = false,
+            prepared = true,
+            completed = false
+        )
     }
 
     override fun onCleared() {
@@ -42,11 +57,12 @@ class PlayerViewModel(
         playerInteractor.onDestroy()
     }
 
-    private fun getTrackTime(): Runnable{
+    private fun getTrackTime(): Runnable {
         return object : Runnable {
             override fun run() {
                 if (getCurrentPlayerState().isPlaying) {
-                    playerStateLiveData.value = getCurrentPlayerState().copy(progress = playerInteractor.trackTime())
+                    playerStateLiveData.value =
+                        getCurrentPlayerState().copy(progress = playerInteractor.trackTime())
                     handler.postDelayed(this, DELAY)
                 }
             }
@@ -59,21 +75,22 @@ class PlayerViewModel(
         playerInteractor.startPlayer()
     }
 
-    fun pausePlayer(){
-        if(getCurrentPlayerState().isPlaying){
+    fun pausePlayer() {
+        if (getCurrentPlayerState().isPlaying) {
             playerInteractor.pausePlayer()
         }
         playerStateLiveData.value = getCurrentPlayerState().copy(isPlaying = false)
         handler.removeCallbacks(getTrackTime())
     }
+
     fun playbackControl() {
-        if(getCurrentPlayerState().isPlaying)
+        if (getCurrentPlayerState().isPlaying)
             pausePlayer()
         else
             startPlayer()
     }
 
-    companion object{
+    companion object {
         private const val DELAY = 1000L
 
         fun getViewModelFactory(track: Track): ViewModelProvider.Factory = viewModelFactory {

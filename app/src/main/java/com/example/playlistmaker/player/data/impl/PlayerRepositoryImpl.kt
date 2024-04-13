@@ -1,10 +1,10 @@
 package com.example.playlistmaker.player.data.impl
 
 import android.media.MediaPlayer
-import com.example.playlistmaker.player.data.api.PlayerRepository
 import com.example.playlistmaker.player.data.TrackTimeFormat
+import com.example.playlistmaker.player.data.api.PlayerRepository
 
-class PlayerRepositoryImpl: PlayerRepository {
+class PlayerRepositoryImpl : PlayerRepository {
 
     private val mediaPlayer = MediaPlayer()
     private var trackTimeFormat = TrackTimeFormat()

@@ -2,11 +2,8 @@ package com.example.playlistmaker
 
 import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker.search.domain.model.Track
-import com.example.playlistmaker.search.ui.activity.SEARCH_HISTORY_PREFERENCES
 
 class App : Application() {
     val THEME_PREFS = "theme_preferences"
@@ -21,10 +18,6 @@ class App : Application() {
         darkTheme = sharedPrefs.getBoolean(THEME_PREF_KEY, darkThemeCheck())
         switchTheme(darkTheme)
 
-        savedHistory = applicationContext.getSharedPreferences(
-            SEARCH_HISTORY_PREFERENCES, Context.MODE_PRIVATE
-        )
-
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {
@@ -38,10 +31,11 @@ class App : Application() {
         )
     }
 
-    fun darkThemeCheck(): Boolean{
+    fun darkThemeCheck(): Boolean {
         val isNight: Boolean
-        val currentNightMode = context?.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)
-        isNight = when (currentNightMode){
+        val currentNightMode =
+            context?.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)
+        isNight = when (currentNightMode) {
             Configuration.UI_MODE_NIGHT_YES -> true
             else -> false
         }
@@ -49,13 +43,6 @@ class App : Application() {
     }
 
     companion object {
-        lateinit var savedHistory: SharedPreferences
-        fun getSharedPreferences(): SharedPreferences {
-            return savedHistory
-        }
-
-        var mediaHistoryList = ArrayList<Track>()
-
         var context: Context? = null
     }
 }

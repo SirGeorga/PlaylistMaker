@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.ui.search.SEARCH_HISTORY_PREFERENCES
+import com.example.playlistmaker.search.domain.model.Track
+import com.example.playlistmaker.search.ui.activity.SEARCH_HISTORY_PREFERENCES
 
 class App : Application() {
     val THEME_PREFS = "theme_preferences"
@@ -39,7 +39,7 @@ class App : Application() {
     }
 
     fun darkThemeCheck(): Boolean{
-        var isNight: Boolean
+        val isNight: Boolean
         val currentNightMode = context?.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)
         isNight = when (currentNightMode){
             Configuration.UI_MODE_NIGHT_YES -> true

@@ -1,51 +1,56 @@
 package com.example.playlistmaker.creator
 
+import android.content.Context
 import com.example.playlistmaker.App
-import com.example.playlistmaker.data.TracksRepositoryImpl
-import com.example.playlistmaker.data.network.RetrofitNetworkClient
-import com.example.playlistmaker.data.settings.ExternalNavigator
-import com.example.playlistmaker.data.settings.SettingsRepository
-import com.example.playlistmaker.data.settings.impl.ExternalNavigatorImpl
-import com.example.playlistmaker.data.settings.impl.SettingsRepositoryImpl
-import com.example.playlistmaker.domain.api.TracksInteractor
-import com.example.playlistmaker.domain.api.TracksRepository
-import com.example.playlistmaker.domain.impl.TracksInteractorImpl
-import com.example.playlistmaker.domain.settings.SettingsInteractor
-import com.example.playlistmaker.domain.settings.impl.SettingsInteractorImpl
-import com.example.playlistmaker.domain.sharing.SharingInteractor
-import com.example.playlistmaker.domain.sharing.impl.SharingInteractorImpl
+import com.example.playlistmaker.search.data.impl.TracksRepositoryImpl
+import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
+import com.example.playlistmaker.player.data.api.PlayerRepository
+import com.example.playlistmaker.player.data.impl.PlayerRepositoryImpl
+import com.example.playlistmaker.sharing.data.api.ExternalNavigator
+import com.example.playlistmaker.settings.data.SettingsRepository
+import com.example.playlistmaker.sharing.data.impl.ExternalNavigatorImpl
+import com.example.playlistmaker.settings.data.SettingsRepositoryImpl
+import com.example.playlistmaker.player.domain.api.PlayerInteractor
+import com.example.playlistmaker.search.domain.api.TracksInteractor
+import com.example.playlistmaker.search.data.api.TracksRepository
+import com.example.playlistmaker.player.domain.impl.PlayerInteractorImpl
+import com.example.playlistmaker.search.domain.impl.TracksInteractorImpl
+import com.example.playlistmaker.settings.domain.api.SettingsInteractor
+import com.example.playlistmaker.settings.domain.impl.SettingsInteractorImpl
+import com.example.playlistmaker.sharing.domain.api.SharingInteractor
+import com.example.playlistmaker.sharing.domain.impl.SharingInteractorImpl
 
 object Creator {
-    private fun getTracksRepository(): TracksRepository {
-        return TracksRepositoryImpl(RetrofitNetworkClient())
+    private fun getTracksRepository(context: Context): TracksRepository {
+        return TracksRepositoryImpl(RetrofitNetworkClient(context))
     }
 
-    fun provideTracksInteractor() : TracksInteractor {
-        return TracksInteractorImpl(getTracksRepository())
+    fun provideTracksInteractor(context: Context) : TracksInteractor {
+        return TracksInteractorImpl(getTracksRepository(context))
     }
 
     private fun getExternalNavigator(): ExternalNavigator {
         return ExternalNavigatorImpl()
     }
 
-    fun provideSharingInteractor(): SharingInteractor{
+    fun provideSharingInteractor(): SharingInteractor {
         return SharingInteractorImpl(getExternalNavigator())
     }
 
-    private fun getSettingsRepository(app: App): SettingsRepository{
+    private fun getSettingsRepository(app: App): SettingsRepository {
         return SettingsRepositoryImpl(app)
     }
 
-    fun provideSettingsInteractor(app: App): SettingsInteractor{
+    fun provideSettingsInteractor(app: App): SettingsInteractor {
         return SettingsInteractorImpl(getSettingsRepository(app))
     }
-/*
-    private fun getPlayerRepository():PlayerRepository{
+
+    private fun getPlayerRepository(): PlayerRepository {
         return PlayerRepositoryImpl()
     }
 
-    fun proovidePlayerInteractor():PlayerInteractor{
+    fun providePlayerInteractor(): PlayerInteractor {
         return PlayerInteractorImpl(getPlayerRepository())
     }
-*/
+
 }

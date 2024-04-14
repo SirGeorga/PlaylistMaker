@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.App
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.settings.domain.api.SettingsInteractor
 import com.example.playlistmaker.settings.domain.model.ThemeSettings
@@ -15,13 +14,11 @@ class SettingsViewModel(
     private val settingsInteractor: SettingsInteractor
 ) : ViewModel() {
 
-
     companion object {
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val app = App()
                 val sharingInteractor = Creator.provideSharingInteractor()
-                val settingsInteractor = Creator.provideSettingsInteractor(app)
+                val settingsInteractor = Creator.provideSettingsInteractor()
                 SettingsViewModel(
                     sharingInteractor,
                     settingsInteractor

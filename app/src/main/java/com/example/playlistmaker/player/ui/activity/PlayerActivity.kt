@@ -39,7 +39,7 @@ class PlayerActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(
             this,
-            PlayerViewModel.getViewModelFactory(track)
+            PlayerViewModel.getViewModelFactory(track, this)
         )[PlayerViewModel::class.java]
 
         viewModel.getPlayerStatusLiveData().observe(this) { playerState ->

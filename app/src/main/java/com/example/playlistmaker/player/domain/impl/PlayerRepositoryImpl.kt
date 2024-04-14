@@ -1,8 +1,8 @@
-package com.example.playlistmaker.player.data.impl
+package com.example.playlistmaker.player.domain.impl
 
 import android.media.MediaPlayer
 import com.example.playlistmaker.player.data.TrackTimeFormat
-import com.example.playlistmaker.player.data.api.PlayerRepository
+import com.example.playlistmaker.player.domain.api.PlayerRepository
 
 class PlayerRepositoryImpl : PlayerRepository {
 
@@ -35,7 +35,7 @@ class PlayerRepositoryImpl : PlayerRepository {
         return trackTimeFormat.convertTrackTimeToString(mediaPlayer.currentPosition)
     }
 
-    override fun onDestroy() {
+    override fun release() {
         mediaPlayer.release()
     }
 }

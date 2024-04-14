@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.example.playlistmaker.App
 import com.example.playlistmaker.R
 import com.example.playlistmaker.settings.ui.view_model.SettingsViewModel
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -42,7 +41,6 @@ class SettingsActivity : AppCompatActivity() {
         themeSwitcher.isChecked = viewModel.getTheme()
         themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
             viewModel.changeTheme(checked)
-            App.context = this
         }
 
         backButton.setOnClickListener {

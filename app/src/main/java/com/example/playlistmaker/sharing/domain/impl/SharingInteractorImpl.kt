@@ -1,13 +1,15 @@
 package com.example.playlistmaker.sharing.domain.impl
 
-import com.example.playlistmaker.App
-import com.example.playlistmaker.R
-import com.example.playlistmaker.sharing.data.api.ExternalNavigator
+import com.example.playlistmaker.sharing.domain.api.ExternalNavigator
 import com.example.playlistmaker.sharing.domain.api.SharingInteractor
 import com.example.playlistmaker.sharing.domain.model.EmailData
 
-class SharingInteractorImpl(private val externalNavigator: ExternalNavigator) : SharingInteractor {
-    val context = App.context
+class SharingInteractorImpl(private val externalNavigator: ExternalNavigator,
+                            private val shareAppLink: String,
+                            private val devEmail: String,
+                            private val mailText: String,
+                            private val mailSubject: String,
+                            private val agreementLink: String) : SharingInteractor {
     override fun shareApp() {
         externalNavigator.shareLink(getShareAppLink())
     }
@@ -20,20 +22,20 @@ class SharingInteractorImpl(private val externalNavigator: ExternalNavigator) : 
         externalNavigator.openEmail(getSupportEmailData())
     }
 
-    private fun getShareAppLink(): String? {
-        return context?.resources?.getString(R.string.st_practicum_link)
+    private fun getShareAppLink(): String {
+        return shareAppLink
     }
 
     private fun getSupportEmailData(): EmailData {
         return EmailData(
-            email = context?.resources?.getString(R.string.st_dev_email),
-            message = context?.resources?.getString(R.string.st_mail_text),
-            theme = context?.resources?.getString(R.string.st_mail_subject)
+            email = devEmail,
+            message = mailText,
+            theme = mailSubject
         )
     }
 
-    private fun getTermsLink(): String? {
-        return context?.resources?.getString(R.string.st_agreement_link)
+    private fun getTermsLink(): String {
+        return agreementLink
     }
 
 }

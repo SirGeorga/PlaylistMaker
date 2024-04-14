@@ -166,13 +166,13 @@ class SearchActivity : AppCompatActivity() {
         progressBar.visibility = VISIBLE
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    //showError - функция динамического отображения плэйсхолдера и Toast при ошибках
-    //errorMessage - текст плэйсхолдера
-    //imgRes - номер изображения из ресурсов
-    //updBtn - видимость кнопки "Обновить" - true/false
-    //additionalMessage - дополнительное сообщение для отладки
-    ////////////////////////////////////////////////////////////////////////////
+    /**
+     *   функция динамического отображения плэйсхолдера и Toast при ошибках
+     *   @property errorMessage - текст плэйсхолдера
+     *   @property imgRes - номер изображения из ресурсов
+     *   @property updBtn - видимость кнопки "Обновить" - true/false
+     *   @property additionalMessage - дополнительное сообщение для отладки
+     */
     private fun showError(
         errorMessage: String, imgRes: Int, updBtn: Boolean, additionalMessage: String
     ) {

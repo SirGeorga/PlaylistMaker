@@ -19,7 +19,7 @@ import com.example.playlistmaker.search.domain.model.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-
+const val historyLimit = 10
 class TrackSearchViewModel(application: Application) : AndroidViewModel(application) {
 
     companion object {
@@ -33,8 +33,7 @@ class TrackSearchViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    private val historyLimit = 10
-    private val tracksInteractor = Creator.provideTracksInteractor(getApplication())
+    private val tracksInteractor = Creator.provideTracksInteractor()
     private val handler = Handler(Looper.getMainLooper())
 
     private val stateLiveData = MutableLiveData<TracksState>()

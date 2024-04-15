@@ -7,12 +7,7 @@ import android.os.SystemClock
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.R
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.search.data.TracksState
 import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.domain.model.Track
@@ -20,20 +15,17 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 const val historyLimit = 10
-class TrackSearchViewModel(application: Application) : AndroidViewModel(application) {
+
+class TrackSearchViewModel(
+    application: Application,
+    private val tracksInteractor: TracksInteractor
+) : AndroidViewModel(application) {
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private val SEARCH_REQUEST_TOKEN = Any()
-
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                TrackSearchViewModel(this[APPLICATION_KEY] as Application)
-            }
-        }
     }
 
-    private val tracksInteractor = Creator.provideTracksInteractor()
     private val handler = Handler(Looper.getMainLooper())
 
     private val stateLiveData = MutableLiveData<TracksState>()
@@ -90,7 +82,7 @@ class TrackSearchViewModel(application: Application) : AndroidViewModel(applicat
                                     errorMessage = getApplication<Application>().getString(R.string.st_no_internet),
                                 )
                             )
-                            showToast.postValue(errorMessage)
+                            showToast.postValue(errorMessage!!)
                         }
 
                         tracks.isEmpty() -> {

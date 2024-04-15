@@ -3,23 +3,21 @@ package com.example.playlistmaker.mainscreen.ui.activity
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
 import com.example.playlistmaker.mainscreen.ui.view_model.MainActivityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var settingsButton: Button
     private lateinit var libraryButton: Button
     private lateinit var searchButton: Button
-    private lateinit var viewModel: MainActivityViewModel
+    private val viewModel: MainActivityViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
 
         initViews()
         initListeners()

@@ -21,7 +21,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
@@ -30,6 +29,7 @@ import com.example.playlistmaker.search.data.TracksState
 import com.example.playlistmaker.search.domain.model.Track
 import com.example.playlistmaker.search.ui.recycler_view.TracksAdapter
 import com.example.playlistmaker.search.ui.view_model.TrackSearchViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
@@ -64,7 +64,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var historyHeader: TextView
     private lateinit var tracksScrollView: NestedScrollView
     private lateinit var progressBar: ProgressBar
-    private lateinit var viewModel: TrackSearchViewModel
+    private val viewModel: TrackSearchViewModel by viewModel()
     private lateinit var textWatcher: TextWatcher
     private var isClickAllowed = true
 
@@ -74,10 +74,6 @@ class SearchActivity : AppCompatActivity() {
 
         initViews()
         initListeners()
-
-        viewModel = ViewModelProvider(
-            this, TrackSearchViewModel.getViewModelFactory()
-        )[TrackSearchViewModel::class.java]
 
         if (savedInstanceState != null) {
             queryInput.setText(savedInstanceState.getString(SEARCH_PHRASE, ""))

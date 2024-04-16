@@ -6,12 +6,12 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.player.ui.PlayerState
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.search.domain.model.Track
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : AppCompatActivity() {
     private lateinit var playerTrackName: TextView
@@ -25,7 +25,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var backButton: TextView
     private lateinit var playButton: ImageButton
     private lateinit var tvElapsedTime: TextView
-    private lateinit var viewModel: PlayerViewModel
+    private val viewModel: PlayerViewModel by viewModel()
     private var url = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,10 +37,7 @@ class PlayerActivity : AppCompatActivity() {
         val track = intent.getParcelableExtra<Track>("track") as Track
         parseTrack(track)
 
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.getViewModelFactory(track, this)
-        )[PlayerViewModel::class.java]
+        viewModel.preparePlayerVM(track)
 
         viewModel.getPlayerStatusLiveData().observe(this) { playerState ->
             changePlayButton(playerState)

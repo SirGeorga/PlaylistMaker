@@ -6,24 +6,19 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.R
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.ui.PlayerState
 import com.example.playlistmaker.search.domain.model.Track
 
 class PlayerViewModel(
     private val playerInteractor: PlayerInteractor,
-    track: Track,
     private val context: Context
 ) : ViewModel() {
     private var playerStateLiveData = MutableLiveData<PlayerState>()
     private val handler = Handler(Looper.getMainLooper())
 
-    init {
+    fun preparePlayerVM(track: Track) {
         playerInteractor.preparePlayer(
             url = track.previewUrl,
             onPreparedCallback = {
@@ -95,17 +90,5 @@ class PlayerViewModel(
 
     companion object {
         private const val DELAY = 1000L
-
-        fun getViewModelFactory(track: Track, context: Context): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val interactor = Creator.providePlayerInteractor()
-                    PlayerViewModel(
-                        interactor,
-                        track,
-                        context
-                    )
-                }
-            }
     }
 }

@@ -1,8 +1,8 @@
 package com.example.playlistmaker.library.ui.activity
 
 import android.os.Bundle
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityLibraryBinding
 import com.example.playlistmaker.library.ui.fragments.LibraryViewPagerAdapter
@@ -12,17 +12,17 @@ class LibraryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLibraryBinding
     private lateinit var tabMediator: TabLayoutMediator
-    private lateinit var backButton: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLibraryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        backButton = findViewById(R.id.bt_library_back)
-        backButton.setOnClickListener {
-            finish()
-        }
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener { finish() }
 
         binding.viewPager.adapter = LibraryViewPagerAdapter(
             supportFragmentManager, lifecycle

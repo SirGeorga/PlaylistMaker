@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
+import com.example.playlistmaker.library.ui.view_model.PlaylistsViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
 
@@ -13,6 +15,8 @@ class PlaylistsFragment : Fragment() {
         fun newInstance() = PlaylistsFragment().apply {
         }
     }
+
+    private val playlistsViewModel: PlaylistsViewModel by viewModel()
 
     private lateinit var binding: FragmentPlaylistsBinding
 

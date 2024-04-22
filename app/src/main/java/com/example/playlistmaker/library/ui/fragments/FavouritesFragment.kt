@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.databinding.FragmentFavouritesBinding
+import com.example.playlistmaker.library.ui.view_model.FavouritesViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavouritesFragment : Fragment() {
 
@@ -14,6 +16,7 @@ class FavouritesFragment : Fragment() {
         }
     }
 
+    private val favouritesViewModel: FavouritesViewModel by viewModel()
     private lateinit var binding: FragmentFavouritesBinding
 
     override fun onCreateView(

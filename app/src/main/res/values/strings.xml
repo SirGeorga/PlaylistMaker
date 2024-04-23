@@ -35,4 +35,9 @@
     <string name="st_track_name">Название композиции</string>
     <string name="st_unknown_cover_url">Unknown Cover</string>
     <string name="st_server_error">Ошибка сервера</string>
+    <string name="st_favourites_empty">Ваша медиатека пуста</string>
+    <string name="st_playlists_empty">Вы не создали \nни одного плейлиста</string>
+    <string name="st_new_playlist">Новый плейлист</string>
+    <string name="st_tab_playlists">Плейлисты</string>
+    <string name="st_tab_favourites">Избранные треки</string>
 </resources>

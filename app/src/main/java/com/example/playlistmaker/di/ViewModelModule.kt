@@ -2,7 +2,6 @@ package com.example.playlistmaker.di
 
 import com.example.playlistmaker.library.ui.view_model.FavouritesViewModel
 import com.example.playlistmaker.library.ui.view_model.PlaylistsViewModel
-import com.example.playlistmaker.mainscreen.ui.view_model.MainActivityViewModel
 import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.search.ui.view_model.TrackSearchViewModel
 import com.example.playlistmaker.settings.ui.view_model.SettingsViewModel
@@ -22,9 +21,6 @@ val viewModelModule = module {
 
     viewModel {
         PlayerViewModel(get(), androidContext())
-    }
-    viewModel {
-        MainActivityViewModel()
     }
 
     viewModel{

@@ -1,4 +1,4 @@
-package com.example.playlistmaker.search.ui.activity
+package com.example.playlistmaker.search.ui.fragment
 
 import android.content.Context
 import android.content.Intent
@@ -7,8 +7,11 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -18,12 +21,13 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.data.TracksState
 import com.example.playlistmaker.search.domain.model.Track
@@ -31,31 +35,13 @@ import com.example.playlistmaker.search.ui.recycler_view.TracksAdapter
 import com.example.playlistmaker.search.ui.view_model.TrackSearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
-
-    private val adapter = TracksAdapter(object : TracksAdapter.TrackClickListener {
-        override fun onTrackClick(track: Track) {
-            if (searchDebounce()) {
-                viewModel.addTrackToHistory(track)
-                val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
-                intent.putExtra("track", track)
-                startActivity(intent)
-            }
-        }
-    })
-
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_PHRASE, searchPhrase)
-    }
+class SearchFragment : Fragment() {
 
     private val handler = Handler(Looper.getMainLooper())
     private var searchPhrase: String = ""
     private lateinit var placeHolderLayout: LinearLayout
     private lateinit var tracksRecyclerView: RecyclerView
     private lateinit var placeHolderImage: ImageView
-    private lateinit var backButton: TextView
     private lateinit var clearButton: ImageView
     private lateinit var placeHolderText: TextView
     private lateinit var updateButton: Button
@@ -67,12 +53,34 @@ class SearchActivity : AppCompatActivity() {
     private val viewModel: TrackSearchViewModel by viewModel()
     private lateinit var textWatcher: TextWatcher
     private var isClickAllowed = true
+    private lateinit var binding: FragmentSearchBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
 
-        initViews()
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+
+    private val adapter = TracksAdapter(object : TracksAdapter.TrackClickListener {
+        override fun onTrackClick(track: Track) {
+            if (searchDebounce()) {
+                viewModel.addTrackToHistory(track)
+                val intent = Intent(requireContext(), PlayerActivity::class.java)
+                intent.putExtra("track", track)
+                startActivity(intent)
+            }
+        }
+    })
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        bindViews()
         initListeners()
 
         if (savedInstanceState != null) {
@@ -80,7 +88,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         tracksRecyclerView.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         tracksRecyclerView.adapter = adapter
         historyInVisible()
 
@@ -121,14 +129,20 @@ class SearchActivity : AppCompatActivity() {
         }
         textWatcher.let { queryInput.addTextChangedListener(it) }
 
-        viewModel.observeState().observe(this) {
+        viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
 
-        viewModel.observeShowToast().observe(this) {
+        viewModel.observeShowToast().observe(viewLifecycleOwner) {
             showToast(it)
         }
 
+    }
+
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(SEARCH_PHRASE, searchPhrase)
     }
 
     override fun onDestroy() {
@@ -137,7 +151,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showToast(additionalMessage: String) {
-        Toast.makeText(this, additionalMessage, Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), additionalMessage, Toast.LENGTH_LONG).show()
     }
 
     private fun render(state: TracksState) {
@@ -185,7 +199,7 @@ class SearchActivity : AppCompatActivity() {
                 else -> GONE
             }
             if (additionalMessage.isNotEmpty()) {
-                Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), additionalMessage, Toast.LENGTH_LONG).show()
             }
         } else {
             placeHolderLayout.visibility = GONE
@@ -217,9 +231,6 @@ class SearchActivity : AppCompatActivity() {
             historyInVisible()
         }
 
-        backButton.setOnClickListener {
-            finish()
-        }
         updateButton.setOnClickListener {
             viewModel.searchRequest(
                 queryInput.text.toString()
@@ -228,7 +239,7 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener {
             placeHolderLayout.visibility = GONE
             queryInput.setText("")
-            val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val keyboard = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             keyboard.hideSoftInputFromWindow(queryInput.windowToken, 0)
             queryInput.clearFocus()
         }
@@ -247,19 +258,18 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun initViews() {
-        placeHolderLayout = findViewById(R.id.llSearchPlaceholder)
-        tracksRecyclerView = findViewById(R.id.tracksRecyclerView)
-        placeHolderImage = findViewById(R.id.ivSearchPlaceholderImg)
-        placeHolderText = findViewById(R.id.tvSearchPlaceholderTxt)
-        updateButton = findViewById(R.id.btSearchUpdate)
-        queryInput = findViewById(R.id.searchEditText)
-        backButton = findViewById(R.id.bt_search_back)
-        clearButton = findViewById(R.id.clearIcon)
-        historyHeader = findViewById(R.id.tvHistoryHeader)
-        clearHistoryButton = findViewById(R.id.bt_clear_search_history)
-        tracksScrollView = findViewById(R.id.nsvTracksInterfaceContainer)
-        progressBar = findViewById(R.id.progressBar)
+    private fun bindViews() {
+        placeHolderLayout = binding.llSearchPlaceholder
+        tracksRecyclerView = binding.tracksRecyclerView
+        placeHolderImage = binding.ivSearchPlaceholderImg
+        placeHolderText = binding.tvSearchPlaceholderTxt
+        updateButton = binding.btSearchUpdate
+        queryInput = binding.searchEditText
+        clearButton = binding.clearIcon
+        historyHeader = binding.tvHistoryHeader
+        clearHistoryButton = binding.btClearSearchHistory
+        tracksScrollView = binding.nsvTracksInterfaceContainer
+        progressBar = binding.progressBar
     }
 
 

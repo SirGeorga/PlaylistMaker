@@ -16,5 +16,6 @@
     <color name="yp_switch_light_blue">#9FBBF3</color>
     <color name="yp_switch_grey">#AEAFB4</color>
     <color name="yp_switch_light_grey">#E6E8EB</color>
+    <color name="yp_items_black">#1A1B22</color>
 
 </resources>

@@ -1,15 +1,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/SettingsScreenBackgoundStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/dm_16dp"
+    tools:context="com.example.playlistmaker.library.ui.fragments.LibraryFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        app:contentInsetStartWithNavigation="0dp"
+        android:layout_height="@dimen/dm_56dp"
+        app:contentInsetStart="0dp"
         app:title="@string/st_library"
         app:titleTextAppearance="@style/SettingsHeaderStyle"
         />
@@ -19,14 +22,10 @@
         style="@style/TabsStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dm_48dp"
-        android:paddingStart="@dimen/dm_16dp"
-        android:paddingEnd="@dimen/dm_16dp"
         app:tabTextAppearance="@style/TabsTextStyle" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingStart="@dimen/dm_16dp"
-        android:paddingEnd="@dimen/dm_16dp" />
+        android:layout_height="match_parent" />
 </LinearLayout>

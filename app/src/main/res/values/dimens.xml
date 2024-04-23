@@ -13,6 +13,7 @@
     <dimen name="top_element_margin_top">14dp</dimen>
     <dimen name="search_bar_corner_radius_8dp">8dp</dimen>
     <dimen name="artist_text_size_11">11sp</dimen>
+    <dimen name="dm_12sp">12sp</dimen>
     <dimen name="dm_13sp">13sp</dimen>
     <dimen name="dm_20dp">20dp</dimen>
     <dimen name="dm_22sp">22sp</dimen>
@@ -27,4 +28,5 @@
     <dimen name="dm_28dp">28dp</dimen>
     <dimen name="dm_106dp">106dp</dimen>
     <dimen name="dm_120dp">120dp</dimen>
+    <dimen name="dm_56dp">56dp</dimen>
 </resources>

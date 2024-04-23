@@ -1,36 +1,44 @@
-package com.example.playlistmaker.settings.ui.activity
+package com.example.playlistmaker.settings.ui.fragment
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import com.example.playlistmaker.R
+import androidx.fragment.app.Fragment
+import com.example.playlistmaker.databinding.FragmentSettingsBinding
 import com.example.playlistmaker.settings.ui.view_model.SettingsViewModel
 import com.google.android.material.switchmaterial.SwitchMaterial
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsFragment : Fragment() {
 
-    private lateinit var backButton: TextView
     private lateinit var shareButton: TextView
     private lateinit var supportButton: TextView
     private lateinit var agreementButton: TextView
     private lateinit var themeSwitcher: SwitchMaterial
+    private lateinit var binding: FragmentSettingsBinding
     private val viewModel: SettingsViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSettingsBinding.inflate(inflater, container, false)
 
-        initViews()
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bindViews()
         initListeners()
     }
 
-    private fun initViews() {
-        themeSwitcher = findViewById(R.id.themeSwitcher)
-        backButton = findViewById(R.id.bt_settings_back)
-        shareButton = findViewById(R.id.bt_settings_share)
-        supportButton = findViewById(R.id.bt_settings_support)
-        agreementButton = findViewById(R.id.bt_settings_agreement)
+    private fun bindViews() {
+        themeSwitcher = binding.themeSwitcher
+        shareButton = binding.btSettingsShare
+        supportButton = binding.btSettingsSupport
+        agreementButton = binding.btSettingsAgreement
     }
 
     private fun initListeners() {
@@ -39,9 +47,6 @@ class SettingsActivity : AppCompatActivity() {
             viewModel.changeTheme(checked)
         }
 
-        backButton.setOnClickListener {
-            finish()
-        }
         shareButton.setOnClickListener {
             viewModel.shareApp()
         }

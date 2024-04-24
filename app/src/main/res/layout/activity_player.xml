@@ -29,7 +29,7 @@
             app:layout_constraintGuide_end="@dimen/margin_24" />
 
         <TextView
-            android:id="@+id/backArrow4"
+            android:id="@+id/backArrow"
             style="@style/SettingsHeaderStyle"
             android:paddingStart="@dimen/dm_20dp"
             app:drawableStartCompat="@drawable/ic_arrow_back"

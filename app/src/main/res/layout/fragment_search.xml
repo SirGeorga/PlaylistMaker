@@ -44,7 +44,8 @@
             android:layout_weight="1"
             android:imeOptions="actionDone"
             android:paddingStart="9dp"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textCursorDrawable="@drawable/shape_edit_text_cursor"/>
 
         <ImageView
             android:id="@+id/clearIcon"

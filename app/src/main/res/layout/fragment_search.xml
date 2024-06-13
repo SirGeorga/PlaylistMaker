@@ -7,15 +7,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingHorizontal="@dimen/common_padding_16">
+    android:paddingHorizontal="@dimen/common_padding_16"
+    tools:context="com.example.playlistmaker.search.ui.fragment.SearchFragment">
 
-    <TextView
-        android:id="@+id/bt_search_back"
-        style="@style/SettingsHeaderStyle"
-        android:layout_gravity="start|center_vertical"
-        android:drawablePadding="28dp"
-        android:text="@string/st_search"
-        app:drawableStartCompat="@drawable/ic_arrow_back" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dm_56dp"
+        app:contentInsetStart="@dimen/zero"
+        android:layout_marginBottom="@dimen/margin_24"
+        app:title="@string/st_search"
+        app:titleTextAppearance="@style/SettingsHeaderStyle"
+        />
 
     <LinearLayout
 
@@ -41,7 +44,8 @@
             android:layout_weight="1"
             android:imeOptions="actionDone"
             android:paddingStart="9dp"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textCursorDrawable="@drawable/shape_edit_text_cursor"/>
 
         <ImageView
             android:id="@+id/clearIcon"

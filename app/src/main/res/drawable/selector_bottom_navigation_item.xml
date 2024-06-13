@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Состояние невыбранного пункта -->
+    <item android:color="@color/yp_items_black" android:state_checked="false"/>
+    <!-- Состояние выбранного пункта -->
+    <item android:color="@color/yp_switch_blue" android:state_checked="true"/>
+</selector>

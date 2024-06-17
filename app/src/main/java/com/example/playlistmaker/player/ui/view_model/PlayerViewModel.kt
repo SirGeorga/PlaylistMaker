@@ -1,23 +1,24 @@
 package com.example.playlistmaker.player.ui.view_model
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.R
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.ui.PlayerState
 import com.example.playlistmaker.search.domain.model.Track
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     private val playerInteractor: PlayerInteractor,
     private val context: Context
 ) : ViewModel() {
     private var playerStateLiveData = MutableLiveData<PlayerState>()
-    private val handler = Handler(Looper.getMainLooper())
-
+    private var timerJob: Job? = null
     fun preparePlayerVM(track: Track) {
         playerInteractor.preparePlayer(
             url = track.previewUrl,
@@ -51,26 +52,23 @@ class PlayerViewModel(
     }
 
     override fun onCleared() {
-        handler.removeCallbacks(getTrackTime())
         playerInteractor.onDestroy()
     }
 
-    private fun getTrackTime(): Runnable {
-        return object : Runnable {
-            override fun run() {
-                if (getCurrentPlayerState().isPlaying) {
-                    playerStateLiveData.value =
-                        getCurrentPlayerState().copy(progress = playerInteractor.trackTime())
-                    handler.postDelayed(this, DELAY)
-                }
+    private fun getTrackTime() {
+        timerJob = viewModelScope.launch {
+            while (getCurrentPlayerState().isPlaying) {
+                playerStateLiveData.value =
+                    getCurrentPlayerState().copy(progress = playerInteractor.trackTime())
+                delay(DELAY)
             }
         }
     }
 
     private fun startPlayer() {
         playerStateLiveData.value = getCurrentPlayerState().copy(isPlaying = true)
-        handler.post(getTrackTime())
         playerInteractor.startPlayer()
+        getTrackTime()
     }
 
     fun pausePlayer() {
@@ -78,7 +76,7 @@ class PlayerViewModel(
             playerInteractor.pausePlayer()
         }
         playerStateLiveData.value = getCurrentPlayerState().copy(isPlaying = false)
-        handler.removeCallbacks(getTrackTime())
+        timerJob?.cancel()
     }
 
     fun playbackControl() {
@@ -89,6 +87,6 @@ class PlayerViewModel(
     }
 
     companion object {
-        private const val DELAY = 1000L
+        private const val DELAY = 300L
     }
 }

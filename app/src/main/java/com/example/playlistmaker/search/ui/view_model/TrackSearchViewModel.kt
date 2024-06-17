@@ -1,108 +1,99 @@
 package com.example.playlistmaker.search.ui.view_model
 
-import android.app.Application
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.R
+import com.example.playlistmaker.creator.debounce
 import com.example.playlistmaker.search.data.TracksState
 import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.domain.model.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.launch
 
 const val historyLimit = 10
 
 class TrackSearchViewModel(
-    application: Application,
     private val tracksInteractor: TracksInteractor
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private val SEARCH_REQUEST_TOKEN = Any()
     }
-
-    private val handler = Handler(Looper.getMainLooper())
 
     private val stateLiveData = MutableLiveData<TracksState>()
     fun observeState(): LiveData<TracksState> = stateLiveData
 
-    private val showToast = SingleLiveEvent<String>()
+    private val showToast = SingleLiveEvent<String?>()
     private var savedHistoryList: ArrayList<Track> = ArrayList()
+
+    var isScreenPaused: Boolean = false
 
     init {
         savedHistoryList.addAll(createTrackListFromJson(tracksInteractor.loadHistory().toString()))
     }
 
-    fun observeShowToast(): LiveData<String> = showToast
+    fun observeShowToast(): SingleLiveEvent<String?> = showToast
 
     private var latestSearchText: String? = null
+    private var trackState: TracksState? = null
 
-    override fun onCleared() {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-    }
-
-    fun searchDebounce(changedText: String) {
-        if (latestSearchText == changedText) {
-            return
+    private val trackSearchDebounce =
+        debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText ->
+            searchRequest(changedText)
         }
 
-        this.latestSearchText = changedText
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-
-        val searchRunnable = Runnable { searchRequest(changedText) }
-
-        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
-        handler.postAtTime(
-            searchRunnable,
-            SEARCH_REQUEST_TOKEN,
-            postTime,
-        )
+    fun searchDebounce(changedText: String) {
+        if (latestSearchText == changedText || changedText == "") {
+            return
+        }
+        trackSearchDebounce(changedText)
     }
 
     fun searchRequest(newSearchText: String) {
+        if (trackState != null) stateLiveData.postValue(trackState!!)
         if (newSearchText.isNotEmpty()) {
             renderState(TracksState.Loading)
-
-            tracksInteractor.searchTracks(newSearchText, object : TracksInteractor.TracksConsumer {
-                override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
-                    val tracks = mutableListOf<Track>()
-                    if (foundTracks != null) {
-                        tracks.addAll(foundTracks)
+            viewModelScope.launch {
+                tracksInteractor
+                    .searchTracks(newSearchText)
+                    .collect { pair ->
+                        if (!isScreenPaused) processResult(pair.first, pair.second)
                     }
+            }
+        }
+    }
 
-                    when {
-                        errorMessage != null -> {
-                            renderState(
-                                TracksState.Error(
-                                    errorMessage = getApplication<Application>().getString(R.string.st_no_internet),
-                                )
-                            )
-                            showToast.postValue(errorMessage!!)
-                        }
-
-                        tracks.isEmpty() -> {
-                            renderState(
-                                TracksState.Empty(
-                                    message = getApplication<Application>().getString(R.string.st_nothing_found),
-                                )
-                            )
-                        }
-
-                        else -> {
-                            renderState(
-                                TracksState.Content(
-                                    tracks = tracks,
-                                )
-                            )
-                        }
-                    }
+    private fun processResult(foundTracks: List<Track>?, errorMessage: String?) {
+        if (foundTracks != null) {
+            when {
+                errorMessage != null -> {
+                    renderState(
+                        TracksState.Error(
+                            errorMessage = R.string.st_no_internet
+                        )
+                    )
+                    showToast.postValue(errorMessage)
                 }
-            })
+
+                foundTracks.isEmpty() -> {
+                    renderState(
+                        TracksState.Empty(
+                            message = R.string.st_nothing_found
+                        )
+                    )
+                }
+
+                else -> {
+                    renderState(
+                        TracksState.Content(
+                            tracks = foundTracks
+                        )
+                    )
+                }
+            }
         }
     }
 
@@ -135,6 +126,7 @@ class TrackSearchViewModel(
     }
 
     private fun renderState(state: TracksState) {
+        trackState = state
         stateLiveData.postValue(state)
     }
 

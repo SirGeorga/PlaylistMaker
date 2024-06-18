@@ -13,7 +13,7 @@ class LibraryFragment : Fragment() {
 
     private var _binding: FragmentLibraryBinding? = null
     private val binding get() = _binding!!
-    private lateinit var tabMediator: TabLayoutMediator
+    private var tabMediator: TabLayoutMediator? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,11 +37,11 @@ class LibraryFragment : Fragment() {
                 1 -> tab.text = getString(R.string.st_tab_playlists)
             }
         }
-        tabMediator.attach()
+        tabMediator?.attach()
     }
 
     override fun onDestroy() {
-        tabMediator.detach()
+        tabMediator?.detach()
         _binding = null
         super.onDestroy()
     }

@@ -18,13 +18,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
-import com.example.playlistmaker.creator.debounce
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.player.ui.activity.PlayerActivity
 import com.example.playlistmaker.search.data.TracksState
 import com.example.playlistmaker.search.domain.model.Track
 import com.example.playlistmaker.search.ui.recycler_view.TracksAdapter
 import com.example.playlistmaker.search.ui.view_model.TrackSearchViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -34,7 +35,7 @@ class SearchFragment : Fragment() {
     private lateinit var textWatcher: TextWatcher
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
-    private lateinit var onTrackClickDebounce: (Track) -> Unit
+    private var isClickAllowed = true
 
 
     override fun onCreateView(
@@ -49,8 +50,13 @@ class SearchFragment : Fragment() {
 
     private val adapter = TracksAdapter(object : TracksAdapter.TrackClickListener {
         override fun onTrackClick(track: Track) {
-            viewModel.addTrackToHistory(track)
-            onTrackClickDebounce(track)
+            if (isClickAllowed) {
+                viewModel.addTrackToHistory(track)
+                val intent = Intent(requireContext(), PlayerActivity::class.java)
+                intent.putExtra("track", track)
+                startActivity(intent)
+                onTrackClickDebounce()
+            }
         }
     })
 
@@ -59,17 +65,6 @@ class SearchFragment : Fragment() {
 
         initListeners()
 
-        onTrackClickDebounce = debounce<Track>(
-            SEARCH_DEBOUNCE_DELAY,
-            viewLifecycleOwner.lifecycleScope,
-            false
-        ) { track ->
-            run {
-                val intent = Intent(requireContext(), PlayerActivity::class.java)
-                intent.putExtra("track", track)
-                startActivity(intent)
-            }
-        }
         if (savedInstanceState != null) {
             binding.searchEditText.setText(savedInstanceState.getString(SEARCH_PHRASE, ""))
         }
@@ -84,20 +79,22 @@ class SearchFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                viewModel.searchDebounce(
+                    changedText = s?.toString() ?: ""
+                )
+
                 binding.clearIcon.isVisible = !s.isNullOrEmpty()
                 searchPhrase = binding.searchEditText.text.toString()
                 if (binding.searchEditText.hasFocus() && s?.isEmpty() == true && viewModel.getCurrentHistoryList()
                         .isNotEmpty()
                 ) {
+                    viewModel.searchRequestStop()
                     adapter.updateMediaAdapter(viewModel.getCurrentHistoryList())
                     historyVisible()
                 } else {
                     historyInVisible()
                 }
 
-                viewModel.searchDebounce(
-                    changedText = s?.toString() ?: ""
-                )
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -128,6 +125,17 @@ class SearchFragment : Fragment() {
 
     }
 
+    private fun onTrackClickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(SEARCH_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
+        }
+        return current
+    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

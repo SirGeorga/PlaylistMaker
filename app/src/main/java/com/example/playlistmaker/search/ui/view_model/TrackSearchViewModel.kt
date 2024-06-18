@@ -5,12 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.R
-import com.example.playlistmaker.creator.debounce
 import com.example.playlistmaker.search.data.TracksState
 import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.domain.model.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 const val historyLimit = 10
@@ -30,6 +31,7 @@ class TrackSearchViewModel(
     private var savedHistoryList: ArrayList<Track> = ArrayList()
 
     var isScreenPaused: Boolean = false
+    private var searchJob: Job? = null
 
     init {
         savedHistoryList.addAll(createTrackListFromJson(tracksInteractor.loadHistory().toString()))
@@ -40,30 +42,34 @@ class TrackSearchViewModel(
     private var latestSearchText: String? = null
     private var trackState: TracksState? = null
 
-    private val trackSearchDebounce =
-        debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText ->
-            searchRequest(changedText)
-        }
-
     fun searchDebounce(changedText: String) {
-        if (latestSearchText == changedText || changedText == "") {
+        if (latestSearchText == changedText) {
             return
         }
-        trackSearchDebounce(changedText)
+        latestSearchText = changedText
+
+        searchRequestStop()
+        searchJob = viewModelScope.launch {
+            delay(SEARCH_DEBOUNCE_DELAY)
+            searchRequest(changedText)
+        }
     }
+
 
     fun searchRequest(newSearchText: String) {
         if (trackState != null) stateLiveData.postValue(trackState!!)
         if (newSearchText.isNotEmpty()) {
             renderState(TracksState.Loading)
             viewModelScope.launch {
-                tracksInteractor
-                    .searchTracks(newSearchText)
-                    .collect { pair ->
-                        if (!isScreenPaused) processResult(pair.first, pair.second)
-                    }
+                tracksInteractor.searchTracks(newSearchText).collect { pair ->
+                    if (!isScreenPaused) processResult(pair.first, pair.second)
+                }
             }
         }
+    }
+
+    fun searchRequestStop() {
+        searchJob?.cancel()
     }
 
     private fun processResult(foundTracks: List<Track>?, errorMessage: String?) {

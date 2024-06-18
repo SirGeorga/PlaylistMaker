@@ -1,5 +1,6 @@
 package com.example.playlistmaker.player.ui.activity
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import androidx.appcompat.app.AppCompatActivity
@@ -19,7 +20,7 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         initListeners()
 
         val track = intent.getParcelableExtra<Track>("track") as Track

@@ -7,5 +7,6 @@ interface PlayerInteractor {
     fun pausePlayer()
     fun trackTime(): String
     fun onDestroy()
+    fun resetPlayer()
 
 }

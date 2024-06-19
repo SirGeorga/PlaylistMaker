@@ -6,4 +6,5 @@ interface PlayerRepository {
     fun pausePlayer()
     fun trackTime(): String
     fun release()
+    fun resetPlayer()
 }

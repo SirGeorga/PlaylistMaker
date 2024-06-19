@@ -11,15 +11,16 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class LibraryFragment : Fragment() {
 
-    private lateinit var binding: FragmentLibraryBinding
-    private lateinit var tabMediator: TabLayoutMediator
+    private var _binding: FragmentLibraryBinding? = null
+    private val binding get() = _binding!!
+    private var tabMediator: TabLayoutMediator? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentLibraryBinding.inflate(inflater, container, false)
+        _binding = FragmentLibraryBinding.inflate(inflater, container, false)
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,11 +37,12 @@ class LibraryFragment : Fragment() {
                 1 -> tab.text = getString(R.string.st_tab_playlists)
             }
         }
-        tabMediator.attach()
+        tabMediator?.attach()
     }
 
     override fun onDestroy() {
-        tabMediator.detach()
+        tabMediator?.detach()
+        _binding = null
         super.onDestroy()
     }
 }

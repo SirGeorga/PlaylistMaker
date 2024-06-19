@@ -20,6 +20,7 @@ class PlayerViewModel(
     private var playerStateLiveData = MutableLiveData<PlayerState>()
     private var timerJob: Job? = null
     fun preparePlayerVM(track: Track) {
+        playerInteractor.resetPlayer()
         playerInteractor.preparePlayer(
             url = track.previewUrl,
             onPreparedCallback = {

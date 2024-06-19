@@ -1,6 +1,5 @@
 package com.example.playlistmaker.player.ui.activity
 
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import androidx.appcompat.app.AppCompatActivity
@@ -20,18 +19,28 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         initListeners()
 
-        val track = intent.getParcelableExtra<Track>("track") as Track
-        parseTrack(track)
+        val track: Track? =
+            savedInstanceState?.getParcelable("track") ?: intent.getParcelableExtra("track")
 
-        viewModel.preparePlayerVM(track)
+        if (track != null) {
+            parseTrack(track)
+            viewModel.preparePlayerVM(track)
+        } else {
+            finish()
+        }
 
         viewModel.getPlayerStatusLiveData().observe(this) { playerState ->
             changePlayButton(playerState)
             binding.tvElapsedTime.text = playerState.progress
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val track = intent.getParcelableExtra<Track>("track")
+        outState.putParcelable("track", track)
     }
 
     private fun changePlayButton(playerState: PlayerState) {

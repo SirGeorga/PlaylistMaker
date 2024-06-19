@@ -27,4 +27,9 @@ class PlayerInteractorImpl(private val repository: PlayerRepository) : PlayerInt
     override fun onDestroy() {
         return repository.release()
     }
+
+    override fun resetPlayer() {
+        return repository.resetPlayer()
+    }
+
 }

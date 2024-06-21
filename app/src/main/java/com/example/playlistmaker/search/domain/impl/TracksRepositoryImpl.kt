@@ -28,8 +28,8 @@ class TracksRepositoryImpl(
 
             200 -> {
                 val data = (response as TracksSearchResponse).results.map{
-                    if(getTrackIdList().contains(it.trackId)){
-                        it.mapToDomain().copy(isFavorite = true)
+                    if(getTrackIdList().contains<Any?>(it.trackId)){
+                        it.mapToDomain().copy(isFavourite = true)
                     }
                     else{
                         it.mapToDomain()
@@ -68,12 +68,12 @@ class TracksRepositoryImpl(
             primaryGenreName = primaryGenreName,
             country = country,
             previewUrl = previewUrl,
-            false
+            isFavourite = false
         )
     }
 
     private suspend fun getTrackIdList(): List<Int>{
         val idList = appDatabase.trackDao().getTracksIdList()
-        return idList ?: emptyList()
+        return idList?: emptyList()
     }
 }

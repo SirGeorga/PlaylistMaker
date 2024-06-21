@@ -18,7 +18,7 @@ data class Track(
     val primaryGenreName: String,
     val country: String,
     val previewUrl: String,
-    val isFavorite: Boolean = false
+    val isFavourite: Boolean = false
 ) : Parcelable {
     val year: String
         get() = releaseDate.take(4)

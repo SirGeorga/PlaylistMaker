@@ -1,6 +1,7 @@
 package com.example.playlistmaker.search.ui.recycler_view
 
 import android.icu.text.SimpleDateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -29,6 +30,7 @@ class TrackViewHolder(
     fun bind(track: Track) {
         trackName.text = track.trackName
         trackAuthor.text = track.artistName
+        Log.d("fuuuuck","Что здесь и где это вообще? ${track.trackTimeMillis}")
         trackLength.text =
             SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
         trackId = track.trackId

@@ -6,7 +6,6 @@ import com.example.playlistmaker.library.domain.api.FavouriteTrackRepository
 import com.example.playlistmaker.search.domain.model.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.internal.NopCollector.emit
 
 class FavouriteTrackRepositoryImpl(
     private val appDatabase: AppDatabase,
@@ -24,7 +23,7 @@ class FavouriteTrackRepositoryImpl(
     override fun getFavoriteTrackList(): Flow<List<Track>> = flow{
         val tracks = appDatabase.trackDao().getTracks()
         emit(convertFromTrackEntity(tracks).map{
-            it.copy(isFavorite = true)
+            it.copy(isFavourite = true)
         })
     }
 

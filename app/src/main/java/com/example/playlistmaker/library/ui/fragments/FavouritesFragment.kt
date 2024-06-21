@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.debounce
 import com.example.playlistmaker.databinding.FragmentFavouritesBinding
 import com.example.playlistmaker.library.ui.model.FavouriteState
@@ -50,11 +51,10 @@ class FavouritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.ivFavouritesPlaceholderImg.setImageResource(R.drawable.nothing_found)
-        binding.tvPlaylistsPlaceholderTxt.setText(R.string.your_media_is_empty)
-        binding.favouriteRecyclerView.adapter = trackAdapter
+        binding.ivFavouritesPlaceholderImg.setImageResource(R.drawable.ic_search_no_item)
+        binding.tvPlaylistsPlaceholderTxt.setText(R.string.st_favourites_empty)
+        binding.rvFavourites.adapter = trackAdapter
 
-        //использование корутины с ФАЙЛОМ ДЕБАУНС
         onTrackClickDebounce = debounce<Track>(SearchFragment.SEARCH_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
             navigateTo(PlayerActivity::class.java, track)
         }
@@ -74,14 +74,14 @@ class FavouritesFragment : Fragment() {
     private fun showEmpty(){
         binding.ivFavouritesPlaceholderImg.visibility = View.VISIBLE
         binding.tvPlaylistsPlaceholderTxt.visibility = View.VISIBLE
-        binding.favouriteRecyclerView.visibility = View.GONE
+        binding.rvFavourites.visibility = View.GONE
     }
 
     private fun showContent(trackList: List<Track>){
-        binding.favoriteRecyclerView.visibility = View.VISIBLE
+        binding.rvFavourites.visibility = View.VISIBLE
         binding.ivFavouritesPlaceholderImg.visibility = View.GONE
         binding.tvPlaylistsPlaceholderTxt.visibility = View.GONE
-        trackAdapter.updateMediaAdapter(trackList)
+        trackAdapter.updateMediaAdapter(trackList as ArrayList<Track>)
     }
 
     private fun navigateTo(clazz: Class<out AppCompatActivity>, track: Track) {

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.R
+import com.example.playlistmaker.library.domain.api.FavouriteTrackInteractor
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.ui.PlayerState
 import com.example.playlistmaker.search.domain.model.Track
@@ -15,41 +16,40 @@ import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     private val playerInteractor: PlayerInteractor,
-    private val context: Context
+    private val context: Context,
+    private val favouriteTrackInteractor: FavouriteTrackInteractor,
 ) : ViewModel() {
     private var playerStateLiveData = MutableLiveData<PlayerState>()
     private var timerJob: Job? = null
     fun preparePlayerVM(track: Track) {
         playerInteractor.resetPlayer()
-        playerInteractor.preparePlayer(
-            url = track.previewUrl,
-            onPreparedCallback = {
-                PlayerState(
-                    progress = context.getString(R.string.st_00_00),
-                    isPlaying = false,
-                    prepared = true,
-                    completed = false
-                    isFavourite =
-                )
-            },
-            onCompleteCallback = {
-                playerStateLiveData.value = getCurrentPlayerState().copy(
-                    progress = context.getString(R.string.st_00_00),
-                    isPlaying = false,
-                    prepared = true,
-                    completed = true
-                )
-            }
-        )
+        playerInteractor.preparePlayer(url = track.previewUrl, onPreparedCallback = {
+            PlayerState(
+                progress = context.getString(R.string.st_00_00),
+                isPlaying = false,
+                prepared = true,
+                completed = false,
+                isFavourite = track.isFavourite
+            )
+        }, onCompleteCallback = {
+            playerStateLiveData.value = getCurrentPlayerState().copy(
+                progress = context.getString(R.string.st_00_00),
+                isPlaying = false,
+                prepared = true,
+                completed = true,
+                isFavourite = track.isFavourite
+            )
+        })
     }
 
-    fun getPlayerStatusLiveData(): LiveData<PlayerState> = playerStateLiveData
+    fun getPlayerStateLiveData(): LiveData<PlayerState> = playerStateLiveData
     fun getCurrentPlayerState(): PlayerState {
         return playerStateLiveData.value ?: PlayerState(
             progress = context.getString(R.string.st_00_00),
             isPlaying = false,
             prepared = true,
-            completed = false
+            completed = false,
+            isFavourite = false
         )
     }
 
@@ -81,11 +81,30 @@ class PlayerViewModel(
         timerJob?.cancel()
     }
 
+
     fun playbackControl() {
-        if (getCurrentPlayerState().isPlaying)
-            pausePlayer()
-        else
-            startPlayer()
+        if (getCurrentPlayerState().isPlaying) pausePlayer()
+        else startPlayer()
+    }
+
+    fun onFavouriteClicked(track: Track): Track {
+        return if (track.isFavourite) deleteFromFavorite(track)
+        else addToFavorite(track)
+    }
+
+    fun addToFavorite(track: Track): Track {
+        viewModelScope.launch {
+            favouriteTrackInteractor.addTrackToFavorite(track)
+            playerStateLiveData.value = getCurrentPlayerState().copy(isFavourite = true)
+        }
+        return track.copy(isFavourite = true)
+    }
+    fun deleteFromFavorite(track: Track): Track {
+        viewModelScope.launch {
+            favouriteTrackInteractor.deleteTrackFromFavorites(track)
+            playerStateLiveData.value = getCurrentPlayerState().copy(isFavourite = false)
+        }
+        return track.copy(isFavourite = false)
     }
 
     companion object {

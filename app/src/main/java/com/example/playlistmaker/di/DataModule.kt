@@ -2,7 +2,9 @@ package com.example.playlistmaker.di
 
 import android.content.Context
 import android.media.MediaPlayer
+import androidx.room.Room
 import com.example.playlistmaker.App
+import com.example.playlistmaker.library.data.AppDatabase
 import com.example.playlistmaker.player.data.TrackTimeFormat
 import com.example.playlistmaker.search.data.NetworkClient
 import com.example.playlistmaker.search.data.SearchHistory
@@ -17,10 +19,8 @@ val dataModule = module {
     val SEARCH_HISTORY_PREFERENCES = "search_history_preferences"
 
     single<ITunesApiService> {
-        Retrofit.Builder()
-            .baseUrl("https://itunes.apple.com")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        Retrofit.Builder().baseUrl("https://itunes.apple.com")
+            .addConverterFactory(GsonConverterFactory.create()).build()
             .create(ITunesApiService::class.java)
     }
     single<NetworkClient> {
@@ -28,8 +28,7 @@ val dataModule = module {
     }
 
     single {
-        androidContext()
-            .getSharedPreferences(SEARCH_HISTORY_PREFERENCES, Context.MODE_PRIVATE)
+        androidContext().getSharedPreferences(SEARCH_HISTORY_PREFERENCES, Context.MODE_PRIVATE)
     }
 
     single {
@@ -42,5 +41,9 @@ val dataModule = module {
 
     factory { MediaPlayer() }
 
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .fallbackToDestructiveMigration().build()
+    }
 
 }

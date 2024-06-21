@@ -29,6 +29,7 @@ class PlayerViewModel(
                     isPlaying = false,
                     prepared = true,
                     completed = false
+                    isFavourite =
                 )
             },
             onCompleteCallback = {

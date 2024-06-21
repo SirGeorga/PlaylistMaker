@@ -10,7 +10,7 @@ import java.util.Locale
 data class Track(
     val trackName: String, // Название композиции
     val artistName: String, // Имя исполнителя
-    val trackTimeMillis: Int, // Продолжительность трека
+    val trackTimeMillis: String, // Продолжительность трека
     val artworkUrl100: String, // Ссылка на изображение обложки
     val trackId: String,
     val collectionName: String,
@@ -18,7 +18,7 @@ data class Track(
     val primaryGenreName: String,
     val country: String,
     val previewUrl: String,
-    val inFavourite: Boolean
+    val isFavorite: Boolean = false
 ) : Parcelable {
     val year: String
         get() = releaseDate.take(4)

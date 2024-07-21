@@ -26,7 +26,8 @@ class PlayerActivity : AppCompatActivity() {
         if (track != null) {
             parseTrack(track)
             viewModel.preparePlayerVM(track)
-
+            if (track.isFavourite)
+                binding.btFavourites.setImageResource(R.drawable.ic_bt_liked)
         } else {
             finish()
         }

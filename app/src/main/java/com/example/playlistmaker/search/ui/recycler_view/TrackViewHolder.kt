@@ -30,10 +30,9 @@ class TrackViewHolder(
     fun bind(track: Track) {
         trackName.text = track.trackName
         trackAuthor.text = track.artistName
-        Log.d("fuuuuck","Что здесь и где это вообще? ${track.trackTimeMillis}")
         trackLength.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
-        trackId = track.trackId
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis.toLong())
+        trackId = track.trackId.toString()
 
         Glide.with(itemView)
             .load(track.artworkUrl100)

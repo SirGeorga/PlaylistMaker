@@ -16,12 +16,13 @@ class TrackDbConverter {
             track.primaryGenreName,
             track.country,
             track.previewUrl,
+            track.isFavourite,
             System.currentTimeMillis())
     }
 
     fun map(trackEntity: TrackEntity): Track{
         return Track(
-            trackEntity.trackId.toString(),
+            trackEntity.trackId.toInt(),
             trackEntity.trackName,
             trackEntity.artistName,
             trackEntity.trackTimeMillis,
@@ -30,6 +31,7 @@ class TrackDbConverter {
             trackEntity.releaseDate,
             trackEntity.primaryGenreName,
             trackEntity.country,
-            trackEntity.previewUrl)
+            trackEntity.previewUrl,
+            trackEntity.isFavourite)
     }
 }

@@ -28,7 +28,7 @@ class TracksRepositoryImpl(
 
             200 -> {
                 val data = (response as TracksSearchResponse).results.map{
-                    if(getTrackIdList().contains<Any?>(it.trackId)){
+                    if(getTrackIdList().contains(it.trackId)){
                         it.mapToDomain().copy(isFavourite = true)
                     }
                     else{

@@ -86,7 +86,7 @@ class FavouritesFragment : Fragment() {
 
     private fun navigateTo(clazz: Class<out AppCompatActivity>, track: Track) {
         val intent = Intent(requireContext(), clazz)
-        intent.putExtra("TRACK", track)
+        intent.putExtra("track", track)
         startActivity(intent)
     }
     override fun onResume() {

@@ -15,37 +15,56 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayerBinding
     private val viewModel: PlayerViewModel by viewModel()
     private var url = ""
+    private val trackKey = "track"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initListeners()
-
-        val track: Track? =
-            savedInstanceState?.getParcelable("track") ?: intent.getParcelableExtra("track")
+        var track: Track? =
+            savedInstanceState?.getParcelable(trackKey) ?: intent.getParcelableExtra(trackKey)
 
         if (track != null) {
             parseTrack(track)
             viewModel.preparePlayerVM(track)
+            if (track.isFavourite)
+                binding.btFavourites.setImageResource(R.drawable.ic_bt_liked)
         } else {
             finish()
         }
 
-        viewModel.getPlayerStatusLiveData().observe(this) { playerState ->
+        binding.btFavourites.setOnClickListener{
+            binding.playButton.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            val likedTrack = track?.let { it1 -> viewModel.onFavouriteClicked(it1) }
+            track = likedTrack
+        }
+
+
+        viewModel.getPlayerStateLiveData().observe(this) { playerState ->
             changePlayButton(playerState)
+            changeLikeButtonStyle(playerState)
             binding.tvElapsedTime.text = playerState.progress
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val track = intent.getParcelableExtra<Track>("track")
-        outState.putParcelable("track", track)
+        val track = intent.getParcelableExtra<Track>(trackKey)
+        outState.putParcelable(trackKey, track)
     }
 
     private fun changePlayButton(playerState: PlayerState) {
         if (playerState.isPlaying) binding.playButton.setImageResource(R.drawable.ic_bt_pause)
         else binding.playButton.setImageResource(R.drawable.ic_bt_play)
+    }
+
+    private fun changeLikeButtonStyle(playStatus: PlayerState){
+        if(playStatus.isFavourite) {
+            binding.btFavourites.setImageResource(R.drawable.ic_bt_liked)
+        }
+        else{
+            binding.btFavourites.setImageResource(R.drawable.ic_bt_like)
+        }
     }
 
     override fun onPause() {

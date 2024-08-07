@@ -3,6 +3,7 @@ package com.example.playlistmaker.search.domain.impl
 import android.content.Context
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Resource
+import com.example.playlistmaker.library.data.AppDatabase
 import com.example.playlistmaker.search.data.NetworkClient
 import com.example.playlistmaker.search.data.SearchHistory
 import com.example.playlistmaker.search.data.dto.TracksSearchRequest
@@ -15,7 +16,8 @@ import kotlinx.coroutines.flow.flow
 class TracksRepositoryImpl(
     private val networkClient: NetworkClient,
     private val searchHistory: SearchHistory,
-    private val context: Context
+    private val context: Context,
+    private val appDatabase: AppDatabase
 ) : TracksRepository {
     override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
@@ -25,9 +27,15 @@ class TracksRepositoryImpl(
             }
 
             200 -> {
-                emit(Resource.Success((response as TracksSearchResponse).results.map {
-                    it.mapToDomain()
-                }))
+                val data = (response as TracksSearchResponse).results.map{
+                    if(getTrackIdList().contains(it.trackId)){
+                        it.mapToDomain().copy(isFavourite = true)
+                    }
+                    else{
+                        it.mapToDomain()
+                    }
+                }
+                emit(Resource.Success(data))
             }
 
             else -> {
@@ -60,7 +68,12 @@ class TracksRepositoryImpl(
             primaryGenreName = primaryGenreName,
             country = country,
             previewUrl = previewUrl,
-            false
+            isFavourite = false
         )
+    }
+
+    private suspend fun getTrackIdList(): List<Int>{
+        val idList = appDatabase.trackDao().getTracksIdList()
+        return idList?: emptyList()
     }
 }

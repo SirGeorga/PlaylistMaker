@@ -34,7 +34,7 @@
             android:paddingStart="@dimen/dm_20dp"
             app:drawableStartCompat="@drawable/ic_arrow_back"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/trackCover"
@@ -43,12 +43,12 @@
             android:layout_gravity="center_vertical"
             android:layout_marginTop="80dp"
             android:src="@drawable/ic_album_placeholder"
-            app:shapeAppearanceOverlay="@style/Circular"
             app:layout_constraintDimensionRatio="h, 1:1"
             app:layout_constraintEnd_toStartOf="@+id/rightGuide"
             app:layout_constraintHorizontal_bias="0.411"
             app:layout_constraintStart_toStartOf="@+id/leftGuide"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/Circular" />
 
         <TextView
             android:id="@+id/playerTrackName"
@@ -98,24 +98,25 @@
             android:layout_marginTop="32dp"
             android:backgroundTint="@android:color/transparent"
             android:fillColor="@color/white"
-            android:src="@drawable/ic_bt_play"
             android:hapticFeedbackEnabled="true"
-            app:layout_constraintEnd_toStartOf="@+id/favourites"
+            android:src="@drawable/ic_bt_play"
+            app:layout_constraintEnd_toStartOf="@+id/btFavourites"
             app:layout_constraintHorizontal_bias="0.574"
             app:layout_constraintStart_toEndOf="@+id/playlistAddButton"
             app:layout_constraintTop_toBottomOf="@id/playerArtistName"
             tools:ignore="UnknownId,SpeakableTextPresentCheck" />
 
         <ImageButton
-            android:id="@+id/favourites"
+            android:id="@+id/btFavourites"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dm_54dp"
             android:backgroundTint="@android:color/transparent"
             android:src="@drawable/ic_bt_like"
-            app:layout_constraintEnd_toEndOf="@+id/playerTrackName"
+            app:layout_constraintEnd_toEndOf="@+id/playerArtistName"
             app:layout_constraintTop_toBottomOf="@id/playerArtistName"
             tools:ignore="SpeakableTextPresentCheck" />
+
         <TextView
             android:id="@+id/tvElapsedTime"
             style="@style/PlayerTextStyle"
@@ -125,7 +126,7 @@
             android:fontFamily="@font/ys_display_medium"
             android:text="@string/st_00_30"
             android:textSize="@dimen/dm_14sp"
-            app:layout_constraintEnd_toStartOf="@+id/favourites"
+            app:layout_constraintEnd_toStartOf="@+id/btFavourites"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/playlistAddButton"
             app:layout_constraintTop_toBottomOf="@+id/playButton" />
@@ -283,6 +284,7 @@
             app:layout_constraintTop_toBottomOf="@id/genre" />
 
         <View
+            android:id="@+id/view"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             app:layout_constraintEnd_toEndOf="parent"

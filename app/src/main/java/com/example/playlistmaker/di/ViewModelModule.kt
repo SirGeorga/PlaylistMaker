@@ -20,7 +20,7 @@ val viewModelModule = module {
     }
 
     viewModel {
-        PlayerViewModel(get(), androidContext())
+        PlayerViewModel(get(), androidContext(), get())
     }
 
     viewModel{
@@ -28,7 +28,7 @@ val viewModelModule = module {
     }
 
     viewModel{
-        FavouritesViewModel()
+        FavouritesViewModel(get())
     }
 
 }

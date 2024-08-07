@@ -8,22 +8,22 @@ import java.util.Locale
 
 @Parcelize
 data class Track(
+    val trackId: Int,
     val trackName: String, // Название композиции
     val artistName: String, // Имя исполнителя
-    val trackTimeMillis: Int, // Продолжительность трека
+    val trackTimeMillis: String, // Продолжительность трека
     val artworkUrl100: String, // Ссылка на изображение обложки
-    val trackId: String,
     val collectionName: String,
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String,
     val previewUrl: String,
-    val inFavourite: Boolean
+    val isFavourite: Boolean = false
 ) : Parcelable {
     val year: String
         get() = releaseDate.take(4)
     val trackTimeNormal
-        get() = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTimeMillis)
+        get() = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTimeMillis.toLong())
     val artworkUrl512
         get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
 

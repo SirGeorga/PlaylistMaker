@@ -1,6 +1,7 @@
 package com.example.playlistmaker.search.ui.recycler_view
 
 import android.icu.text.SimpleDateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -30,8 +31,8 @@ class TrackViewHolder(
         trackName.text = track.trackName
         trackAuthor.text = track.artistName
         trackLength.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
-        trackId = track.trackId
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis.toLong())
+        trackId = track.trackId.toString()
 
         Glide.with(itemView)
             .load(track.artworkUrl100)

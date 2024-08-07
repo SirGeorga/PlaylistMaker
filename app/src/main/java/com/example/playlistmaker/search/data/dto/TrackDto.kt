@@ -9,11 +9,11 @@ import java.util.Locale
 
 @Parcelize
 data class TrackDto(
+    val trackId: Int,
     val trackName: String, // Название композиции
     val artistName: String, // Имя исполнителя
     val trackTimeMillis: Int, // Продолжительность трека
     val artworkUrl100: String, // Ссылка на изображение обложки
-    val trackId: String,
     val collectionName: String,
     val releaseDate: String,
     val primaryGenreName: String,

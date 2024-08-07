@@ -34,7 +34,9 @@ class TrackSearchViewModel(
     private var searchJob: Job? = null
 
     init {
-        savedHistoryList.addAll(createTrackListFromJson(tracksInteractor.loadHistory().toString()))
+        viewModelScope.launch{
+            savedHistoryList.addAll(createTrackListFromJson(tracksInteractor.loadHistory().toString()))
+        }
     }
 
     fun observeShowToast(): SingleLiveEvent<String?> = showToast

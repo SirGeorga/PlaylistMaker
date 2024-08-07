@@ -26,9 +26,11 @@ class LibraryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+                val favourites = "favorites"
         binding.viewPager.adapter = LibraryViewPagerAdapter(
-            childFragmentManager,
-            lifecycle
+            this.childFragmentManager,
+            this.lifecycle,
+            favourites
         )
 
         tabMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->

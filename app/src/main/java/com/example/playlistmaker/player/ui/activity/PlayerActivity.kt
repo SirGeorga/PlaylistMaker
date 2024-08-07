@@ -15,13 +15,14 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayerBinding
     private val viewModel: PlayerViewModel by viewModel()
     private var url = ""
+    private val trackKey = "track"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initListeners()
         var track: Track? =
-            savedInstanceState?.getParcelable("track") ?: intent.getParcelableExtra("track")
+            savedInstanceState?.getParcelable(trackKey) ?: intent.getParcelableExtra(trackKey)
 
         if (track != null) {
             parseTrack(track)
@@ -48,8 +49,8 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val track = intent.getParcelableExtra<Track>("track")
-        outState.putParcelable("track", track)
+        val track = intent.getParcelableExtra<Track>(trackKey)
+        outState.putParcelable(trackKey, track)
     }
 
     private fun changePlayButton(playerState: PlayerState) {

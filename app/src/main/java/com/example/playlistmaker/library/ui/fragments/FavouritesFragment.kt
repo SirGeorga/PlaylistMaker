@@ -22,8 +22,10 @@ import org.koin.core.parameter.parametersOf
 
 class FavouritesFragment : Fragment() {
 
+
     companion object {
         private const val FAVOURITES = "favourites"
+        private const val TRACK = "track"
         fun newInstance(favouritesTrackAdapter: String) = FavouritesFragment().apply {
             arguments = Bundle().apply {
                 putString(FAVOURITES, favouritesTrackAdapter)
@@ -86,7 +88,7 @@ class FavouritesFragment : Fragment() {
 
     private fun navigateTo(clazz: Class<out AppCompatActivity>, track: Track) {
         val intent = Intent(requireContext(), clazz)
-        intent.putExtra("track", track)
+        intent.putExtra(TRACK, track)
         startActivity(intent)
     }
     override fun onResume() {

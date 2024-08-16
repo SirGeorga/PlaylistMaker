@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/PlayerBackgroudStyle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".library.ui.fragments.NewPlaylistFragment">
+
+    <TextView
+        android:id="@+id/llButtonBack"
+        style="@style/SettingsHeaderStyle"
+        android:drawablePadding="@dimen/dm_12dp"
+        android:paddingStart="@dimen/dm_16dp"
+        android:text="@string/st_new_playlist"
+        app:drawableStartCompat="@drawable/ic_arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        style="@style/PlayerBackgroudStyle"
+        android:layout_width="312dp"
+        android:layout_height="312dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="26dp"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="@dimen/main_bt_margin_bottom_8dp"
+        app:cardElevation="@dimen/zero">
+
+        <ImageView
+            android:id="@+id/ivNewPlaylistImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/new_playlist" />
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:paddingLeft="@dimen/dm_16dp"
+        android:paddingRight="@dimen/dm_16dp"
+        app:boxStrokeColor="@color/edit_text_outline_color">
+
+        <EditText
+            android:id="@+id/etNewPlaylistNameInput"
+            style="@style/PlayerTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ys_display_regular"
+            android:hint="@string/st_playlist_name"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLength="30"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textCursorDrawable="@drawable/shape_edit_text_cursor"
+            android:textSize="@dimen/settings_content_text_size_16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dm_10dp"
+        android:paddingLeft="@dimen/dm_16dp"
+        android:paddingRight="@dimen/dm_16dp"
+        app:boxStrokeColor="@color/edit_text_outline_color">
+
+        <EditText
+            android:id="@+id/etDescriptionInput"
+            style="@style/PlayerTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ys_display_regular"
+            android:hint="@string/st_playlist_description"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLength="30"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textCursorDrawable="@drawable/shape_edit_text_cursor"
+            android:textSize="@dimen/settings_content_text_size_16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/bCreatePlaylistButton"
+        style="@style/CreatePlaylistButtonStyle"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="@dimen/dm_17dp"
+        android:layout_marginTop="70dp"
+        android:enabled="false"
+        android:foreground="?attr/selectableItemBackground"
+        android:insetTop="@dimen/zero"
+        android:insetBottom="@dimen/zero"
+        android:text="@string/st_playlist_create" />
+</LinearLayout>

@@ -5,8 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class LibraryViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle,
-                              private val favourites: String) :
+class LibraryViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {
 
     override fun getItemCount(): Int {
@@ -15,7 +14,7 @@ class LibraryViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifec
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> FavouritesFragment.newInstance(favourites)
+            0 -> FavouritesFragment.newInstance()
             else -> PlaylistsFragment.newInstance()
         }
     }

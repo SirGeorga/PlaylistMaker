@@ -92,7 +92,7 @@
             tools:ignore="UnknownId,SpeakableTextPresentCheck" />
 
         <ImageButton
-            android:id="@+id/playButton"
+            android:id="@+id/btPlayButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -129,7 +129,7 @@
             app:layout_constraintEnd_toStartOf="@+id/btFavourites"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/playlistAddButton"
-            app:layout_constraintTop_toBottomOf="@+id/playButton" />
+            app:layout_constraintTop_toBottomOf="@+id/btPlayButton" />
 
         <TextView
             android:id="@+id/trackTimeName"

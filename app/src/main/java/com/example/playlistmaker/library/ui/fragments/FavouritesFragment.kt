@@ -1,52 +1,46 @@
 package com.example.playlistmaker.library.ui.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.debounce
 import com.example.playlistmaker.databinding.FragmentFavouritesBinding
 import com.example.playlistmaker.library.ui.model.FavouriteState
 import com.example.playlistmaker.library.ui.view_model.FavouritesViewModel
-import com.example.playlistmaker.player.ui.activity.PlayerActivity
+import com.example.playlistmaker.player.ui.fragments.PlayerFragment
 import com.example.playlistmaker.search.domain.model.Track
 import com.example.playlistmaker.search.ui.fragment.SearchFragment
 import com.example.playlistmaker.search.ui.recycler_view.TracksAdapter
+import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
 class FavouritesFragment : Fragment() {
 
 
     companion object {
-        private const val FAVOURITES = "favourites"
         private const val TRACK = "track"
-        fun newInstance(favouritesTrackAdapter: String) = FavouritesFragment().apply {
-            arguments = Bundle().apply {
-                putString(FAVOURITES, favouritesTrackAdapter)
-            }
-        }
+        fun newInstance() = FavouritesFragment()
     }
 
     private val trackAdapter = TracksAdapter {
         onTrackClickDebounce(it)
     }
 
-    private val favouritesViewModel: FavouritesViewModel by viewModel {
-        parametersOf(requireArguments().getString(FAVOURITES))
-    }
+    private val favouritesViewModel by viewModel<FavouritesViewModel>()
 
     private lateinit var onTrackClickDebounce: (Track) -> Unit
     private var _binding: FragmentFavouritesBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         _binding = FragmentFavouritesBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -57,8 +51,15 @@ class FavouritesFragment : Fragment() {
         binding.tvPlaylistsPlaceholderTxt.setText(R.string.st_favourites_empty)
         binding.rvFavourites.adapter = trackAdapter
 
-        onTrackClickDebounce = debounce<Track>(SearchFragment.SEARCH_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
-            navigateTo(PlayerActivity::class.java, track)
+        onTrackClickDebounce = debounce<Track>(
+            SearchFragment.SEARCH_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { track ->
+            findNavController().navigate(
+                R.id.action_libraryFragment_to_playerFragment,
+                PlayerFragment.createArgs(createJsonFromTrack(track))
+            )
         }
 
         favouritesViewModel.observeFavorites().observe(viewLifecycleOwner) {
@@ -66,37 +67,37 @@ class FavouritesFragment : Fragment() {
         }
     }
 
-    private fun render(state: FavouriteState){
-        when(state){
+    private fun render(state: FavouriteState) {
+        when (state) {
             is FavouriteState.Empty -> showEmpty()
             is FavouriteState.Content -> showContent(state.tracks)
         }
     }
 
-    private fun showEmpty(){
+    private fun showEmpty() {
         binding.ivFavouritesPlaceholderImg.visibility = View.VISIBLE
         binding.tvPlaylistsPlaceholderTxt.visibility = View.VISIBLE
         binding.rvFavourites.visibility = View.GONE
     }
 
-    private fun showContent(trackList: List<Track>){
+    private fun showContent(trackList: List<Track>) {
         binding.rvFavourites.visibility = View.VISIBLE
         binding.ivFavouritesPlaceholderImg.visibility = View.GONE
         binding.tvPlaylistsPlaceholderTxt.visibility = View.GONE
         trackAdapter.updateMediaAdapter(trackList as ArrayList<Track>)
     }
 
-    private fun navigateTo(clazz: Class<out AppCompatActivity>, track: Track) {
-        val intent = Intent(requireContext(), clazz)
-        intent.putExtra(TRACK, track)
-        startActivity(intent)
-    }
     override fun onResume() {
         super.onResume()
         favouritesViewModel.fillData()
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun createJsonFromTrack(track: Track): String {
+        return Gson().toJson(track)
     }
 }

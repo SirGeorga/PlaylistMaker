@@ -1,7 +1,6 @@
 package com.example.playlistmaker.search.ui.fragment
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,14 +15,16 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
-import com.example.playlistmaker.player.ui.activity.PlayerActivity
+import com.example.playlistmaker.player.ui.fragments.PlayerFragment
 import com.example.playlistmaker.search.data.TracksState
 import com.example.playlistmaker.search.domain.model.Track
 import com.example.playlistmaker.search.ui.recycler_view.TracksAdapter
 import com.example.playlistmaker.search.ui.view_model.TrackSearchViewModel
+import com.google.gson.Gson
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -48,17 +49,15 @@ class SearchFragment : Fragment() {
     }
 
 
-    private val adapter = TracksAdapter(object : TracksAdapter.TrackClickListener {
-        override fun onTrackClick(track: Track) {
-            if (isClickAllowed) {
-                viewModel.addTrackToHistory(track)
-                val intent = Intent(requireContext(), PlayerActivity::class.java)
-                intent.putExtra("track", track)
-                startActivity(intent)
-                onTrackClickDebounce()
-            }
+    private val adapter = TracksAdapter { track ->
+        if (isClickAllowed) {
+            viewModel.addTrackToHistory(track)
+            findNavController().navigate(
+                R.id.action_searchFragment_to_playerFragment,
+                PlayerFragment.createArgs(createJsonFromTrack(track))
+            )
         }
-    })
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -125,16 +124,8 @@ class SearchFragment : Fragment() {
 
     }
 
-    private fun onTrackClickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            viewLifecycleOwner.lifecycleScope.launch {
-                delay(SEARCH_DEBOUNCE_DELAY)
-                isClickAllowed = true
-            }
-        }
-        return current
+    private fun createJsonFromTrack(track: Track): String {
+        return Gson().toJson(track)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

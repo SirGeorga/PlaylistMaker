@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="plurals_track">
+        <item quantity="zero"> треков</item>
+        <item quantity="one"> трек</item>
+        <item quantity="two"> трека</item>
+        <item quantity="few"> трека</item>
+        <item quantity="many"> треков</item>
+        <item quantity="other"> треков</item>
+    </plurals>
+</resources>

@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
@@ -49,8 +48,7 @@ class NewPlaylistFragment : Fragment() {
     private var currentPlaylist = Playlist()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlaylistCreationBinding.inflate(inflater, container, false)
 
@@ -62,23 +60,22 @@ class NewPlaylistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        pickMedia =
-            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-                if (uri != null) {
-                    binding.ivNewPlaylistImage.setImageURI(uri)
-                    currentUri = uri
-                } else {
-                    Log.d("PhotoPicker", "No media selected")
-                }
+        pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri != null) {
+                binding.ivNewPlaylistImage.setImageURI(uri)
+                currentUri = uri
+            } else {
+                Log.d("PhotoPicker", "No media selected")
             }
+        }
 
-        confirmDialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.st_abort_playlist_creation))
-            .setMessage(getString(R.string.st_data_loss))
-            .setNeutralButton(getString(R.string.st_cancell)) { dialog, which ->
-            }.setPositiveButton(getString(R.string.st_complete)) { dialog, which ->
-                findNavController().popBackStack()
-            }
+        confirmDialog =
+            MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.st_abort_playlist_creation))
+                .setMessage(getString(R.string.st_data_loss))
+                .setNeutralButton(getString(R.string.st_cancell)) { dialog, which ->
+                }.setPositiveButton(getString(R.string.st_complete)) { dialog, which ->
+                    findNavController().popBackStack()
+                }
 
         binding.llButtonBack.setOnClickListener {
             showDialog()
@@ -90,8 +87,7 @@ class NewPlaylistFragment : Fragment() {
                 requireContext(),
                 "Плейлист ${binding.etNewPlaylistNameInput.text} создан",
                 Toast.LENGTH_LONG
-            )
-                .show()
+            ).show()
             findNavController().popBackStack()
         }
 
@@ -150,12 +146,11 @@ class NewPlaylistFragment : Fragment() {
     }
 
     private fun showDialog() {
-        if (!TextUtils.isEmpty(binding.etNewPlaylistNameInput.text.toString().trim()) ||
-            !TextUtils.isEmpty(binding.etDescriptionInput.text.toString().trim()) ||
-            binding.ivNewPlaylistImage.drawable != null
-        ) {
-            confirmDialog.show()
-        } else findNavController().popBackStack()
+        if (binding.etNewPlaylistNameInput.text.toString().trim()
+                .isNotEmpty() || binding.etDescriptionInput.text.toString().trim()
+                .isNotEmpty() || currentUri != null
+        ) confirmDialog.show()
+        else findNavController().popBackStack()
     }
 
     private fun saveImageToPrivateStorage(uri: Uri?) {
@@ -169,8 +164,7 @@ class NewPlaylistFragment : Fragment() {
         imageFilePath = file.toString()
         val inputStream = requireActivity().contentResolver.openInputStream(uri)
         val outputStream = FileOutputStream(file)
-        BitmapFactory
-            .decodeStream(inputStream)
+        BitmapFactory.decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
     }
 

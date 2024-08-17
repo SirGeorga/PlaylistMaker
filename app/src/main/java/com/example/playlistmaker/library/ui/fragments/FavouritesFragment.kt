@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -21,12 +22,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavouritesFragment : Fragment() {
 
-
-    companion object {
-        private const val TRACK = "track"
-        fun newInstance() = FavouritesFragment()
-    }
-
     private val trackAdapter = TracksAdapter {
         onTrackClickDebounce(it)
     }
@@ -38,8 +33,7 @@ class FavouritesFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentFavouritesBinding.inflate(inflater, container, false)
         return binding.root
@@ -52,9 +46,7 @@ class FavouritesFragment : Fragment() {
         binding.rvFavourites.adapter = trackAdapter
 
         onTrackClickDebounce = debounce<Track>(
-            SearchFragment.SEARCH_DEBOUNCE_DELAY,
-            viewLifecycleOwner.lifecycleScope,
-            false
+            SearchFragment.SEARCH_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
         ) { track ->
             findNavController().navigate(
                 R.id.action_libraryFragment_to_playerFragment,
@@ -75,15 +67,15 @@ class FavouritesFragment : Fragment() {
     }
 
     private fun showEmpty() {
-        binding.ivFavouritesPlaceholderImg.visibility = View.VISIBLE
-        binding.tvPlaylistsPlaceholderTxt.visibility = View.VISIBLE
-        binding.rvFavourites.visibility = View.GONE
+        binding.rvFavourites.isVisible = false
+        binding.ivFavouritesPlaceholderImg.isVisible = true
+        binding.tvPlaylistsPlaceholderTxt.isVisible = true
     }
 
     private fun showContent(trackList: List<Track>) {
-        binding.rvFavourites.visibility = View.VISIBLE
-        binding.ivFavouritesPlaceholderImg.visibility = View.GONE
-        binding.tvPlaylistsPlaceholderTxt.visibility = View.GONE
+        binding.rvFavourites.isVisible = true
+        binding.ivFavouritesPlaceholderImg.isVisible = false
+        binding.tvPlaylistsPlaceholderTxt.isVisible = false
         trackAdapter.updateMediaAdapter(trackList as ArrayList<Track>)
     }
 
@@ -99,5 +91,9 @@ class FavouritesFragment : Fragment() {
 
     private fun createJsonFromTrack(track: Track): String {
         return Gson().toJson(track)
+    }
+
+    companion object {
+        fun newInstance() = FavouritesFragment()
     }
 }

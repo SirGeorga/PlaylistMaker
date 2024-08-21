@@ -40,4 +40,12 @@
     <string name="st_new_playlist">Новый плейлист</string>
     <string name="st_tab_playlists">Плейлисты</string>
     <string name="st_tab_favourites">Избранные треки</string>
+    <string name="st_playlist_description">Описание</string>
+    <string name="st_playlist_name">Название</string>
+    <string name="st_playlist_create">Создать</string>
+    <string name="st_add_to_playlist">Добавить в плейлист</string>
+    <string name="st_abort_playlist_creation">Завершить создание плейлиста?</string>
+    <string name="st_data_loss">Все несохраненные данные будут потеряны</string>
+    <string name="st_cancell">Отмена</string>
+    <string name="st_complete">Завершить</string>
 </resources>

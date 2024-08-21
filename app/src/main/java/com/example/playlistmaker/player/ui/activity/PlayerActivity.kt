@@ -27,14 +27,13 @@ class PlayerActivity : AppCompatActivity() {
         if (track != null) {
             parseTrack(track)
             viewModel.preparePlayerVM(track)
-            if (track.isFavourite)
-                binding.btFavourites.setImageResource(R.drawable.ic_bt_liked)
+            if (track.isFavourite) binding.btFavourites.setImageResource(R.drawable.ic_bt_liked)
         } else {
             finish()
         }
 
-        binding.btFavourites.setOnClickListener{
-            binding.playButton.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+        binding.btFavourites.setOnClickListener {
+            binding.btPlayButton.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
             val likedTrack = track?.let { it1 -> viewModel.onFavouriteClicked(it1) }
             track = likedTrack
         }
@@ -54,15 +53,14 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun changePlayButton(playerState: PlayerState) {
-        if (playerState.isPlaying) binding.playButton.setImageResource(R.drawable.ic_bt_pause)
-        else binding.playButton.setImageResource(R.drawable.ic_bt_play)
+        if (playerState.isPlaying) binding.btPlayButton.setImageResource(R.drawable.ic_bt_pause)
+        else binding.btPlayButton.setImageResource(R.drawable.ic_bt_play)
     }
 
-    private fun changeLikeButtonStyle(playStatus: PlayerState){
-        if(playStatus.isFavourite) {
+    private fun changeLikeButtonStyle(playStatus: PlayerState) {
+        if (playStatus.isFavourite) {
             binding.btFavourites.setImageResource(R.drawable.ic_bt_liked)
-        }
-        else{
+        } else {
             binding.btFavourites.setImageResource(R.drawable.ic_bt_like)
         }
     }
@@ -76,8 +74,8 @@ class PlayerActivity : AppCompatActivity() {
         binding.backArrow.setOnClickListener {
             finish()
         }
-        binding.playButton.setOnClickListener {
-            binding.playButton.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+        binding.btPlayButton.setOnClickListener {
+            binding.btPlayButton.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
             viewModel.playbackControl()
         }
     }

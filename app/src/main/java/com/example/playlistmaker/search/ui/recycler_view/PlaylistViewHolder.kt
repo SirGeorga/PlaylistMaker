@@ -10,11 +10,9 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.search.domain.model.Playlist
 
-class PlaylistViewHolder(parent: ViewGroup) :
-    RecyclerView.ViewHolder(
-        LayoutInflater.from(parent.context)
-            .inflate(R.layout.playlist_item, parent, false)
-    ) {
+class PlaylistViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
+    LayoutInflater.from(parent.context).inflate(R.layout.playlist_item, parent, false)
+) {
 
     private val playlistImage: ImageView = itemView.findViewById(R.id.playlistImage)
     private val titlePlayist: TextView = itemView.findViewById(R.id.titlePlayist)
@@ -23,9 +21,7 @@ class PlaylistViewHolder(parent: ViewGroup) :
 
     fun bind(item: Playlist) {
 
-        Glide.with(itemView)
-            .load(item.imageFilePath)
-            .placeholder(R.drawable.ic_placeholder)
+        Glide.with(itemView).load(item.imageFilePath).placeholder(R.drawable.ic_placeholder)
             .centerCrop()
             .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.search_bar_corner_radius_8dp)))
             .into(playlistImage)
@@ -33,6 +29,6 @@ class PlaylistViewHolder(parent: ViewGroup) :
         titlePlayist.text = item.playlistName
         numberOfTracks.text = item.numberOfTracks.toString()
         tracks.text =
-            itemView.resources.getQuantityString(R.plurals.plurals_track, item.numberOfTracks)
+            itemView.resources.getQuantityString(R.plurals.plurals_tracks, item.numberOfTracks)
     }
 }

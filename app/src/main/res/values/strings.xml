@@ -4,7 +4,7 @@
     <string name="st_library">Медиатека</string>
     <string name="st_settings">Настройки</string>
     <string name="st_dark_theme">Тёмная тема</string>
-    <string name="st_share">Поделиться приложением</string>
+    <string name="st_share_app">Поделиться приложением</string>
     <string name="st_support">Написать в поддержку</string>
     <string name="st_user_agreement">Пользовательское соглашение</string>
     <string name="st_input_hint">Поиск</string>
@@ -48,4 +48,15 @@
     <string name="st_data_loss">Все несохраненные данные будут потеряны</string>
     <string name="st_cancell">Отмена</string>
     <string name="st_complete">Завершить</string>
+    <string name="st_share">Поделиться</string>
+    <string name="st_no_tracks_in_playlist">В этом плейлисте нет треков</string>
+    <string name="st_delete_playlist">Удалить плейлист</string>
+    <string name="st_edit">Редактировать</string>
+    <string name="st_edit_playlist">Редактировать информацию</string>
+    <string name="st_save">Сохранить</string>
+    <string name="st_yes">Да</string>
+    <string name="st_no">Нет</string>
+    <string name="st_do_you_want_to_delete_playlist">Хотите удалить плейлист?</string>
+    <string name="st_do_you_want_to_delete_track">Хотите удалить трек?</string>
+    <string name="st_theres_no_track_to_share">В этом плейлисте нет списка треков, которым можно поделиться</string>
 </resources>

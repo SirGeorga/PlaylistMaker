@@ -4,7 +4,6 @@ import android.Manifest
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.text.Editable
@@ -19,7 +18,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -35,17 +33,18 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
+import java.util.UUID
 
-class NewPlaylistFragment : Fragment() {
-    private val newPlaylistViewModel by viewModel<NewPlaylistViewModel>()
+open class NewPlaylistFragment : Fragment() {
+    open val viewModel by viewModel<NewPlaylistViewModel>()
     val requester = PermissionRequester.instance()
-    private var _binding: FragmentPlaylistCreationBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+    var _binding: FragmentPlaylistCreationBinding? = null
+    val binding get() = _binding!!
+    open lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
     lateinit var confirmDialog: MaterialAlertDialogBuilder
-    private var currentUri: Uri? = null
-    private var imageFilePath: String? = null
-    private var currentPlaylist = Playlist()
+    open var currentUri: Uri? = null
+    var imageFilePath: String? = null
+    var currentPlaylist = Playlist()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -55,7 +54,7 @@ class NewPlaylistFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -80,6 +79,9 @@ class NewPlaylistFragment : Fragment() {
         binding.llButtonBack.setOnClickListener {
             showDialog()
         }
+
+        binding.llButtonBack.text = resources.getString(R.string.st_new_playlist)
+        binding.bCreatePlaylistButton.text = resources.getString(R.string.st_playlist_create)
 
         binding.bCreatePlaylistButton.setOnClickListener {
             createPlaylist(currentPlaylist)
@@ -135,12 +137,12 @@ class NewPlaylistFragment : Fragment() {
 
     }
 
-    private fun markButtonDisable(button: Button) {
+    fun markButtonDisable(button: Button) {
         button.isEnabled = false
         button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.yp_dark_grey))
     }
 
-    private fun markButtonAble(button: Button) {
+    fun markButtonAble(button: Button) {
         button.isEnabled = true
         button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.yp_switch_blue))
     }
@@ -153,24 +155,24 @@ class NewPlaylistFragment : Fragment() {
         else findNavController().popBackStack()
     }
 
-    private fun saveImageToPrivateStorage(uri: Uri?) {
+    fun saveImageToPrivateStorage(uri: Uri?) {
         uri ?: return
         val filePath =
             File(requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "myalbum")
         if (!filePath.exists()) {
             filePath.mkdirs()
         }
-        val file = File(filePath, "${binding.etNewPlaylistNameInput.text}.jpg")
+        val file = File(filePath, "${binding.etNewPlaylistNameInput.text}${UUID.randomUUID()}.jpg")
         imageFilePath = file.toString()
         val inputStream = requireActivity().contentResolver.openInputStream(uri)
-        val outputStream = FileOutputStream(file)
+        val outputStream = FileOutputStream(file, false)
         BitmapFactory.decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
     }
 
-    private fun createPlaylist(playlist: Playlist) {
+    open fun createPlaylist(playlist: Playlist) {
         saveImageToPrivateStorage(currentUri)
-        newPlaylistViewModel.addPlaylist(
+        viewModel.addPlaylist(
             playlist.copy(
                 playlistName = binding.etNewPlaylistNameInput.text.toString(),
                 playlistDescription = binding.etDescriptionInput.text.toString(),
@@ -179,7 +181,7 @@ class NewPlaylistFragment : Fragment() {
         )
     }
 
-    private fun setPlaceholder(): String {
+    fun setPlaceholder(): String {
         binding.ivNewPlaylistImage.setImageResource(R.drawable.ic_placeholder)
         return ""
     }

@@ -1,36 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.playlistmaker.settings.ui.fragment.SettingsFragment">
 
     <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        style="@style/SettingsScreenBackgoundStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingHorizontal="@dimen/common_padding_16"
-        style="@style/SettingsScreenBackgoundStyle">
+        android:paddingHorizontal="@dimen/common_padding_16">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dm_56dp"
-            app:contentInsetStart="@dimen/zero"
             android:layout_marginBottom="@dimen/margin_24"
+            app:contentInsetStart="@dimen/zero"
             app:title="@string/st_settings"
-            app:titleTextAppearance="@style/SettingsHeaderStyle"
-            />
+            app:titleTextAppearance="@style/SettingsHeaderStyle" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/themeSwitcher"
             style="@style/NightModeSwitchStyle"
-            android:text="@string/st_dark_theme"/>
+            android:text="@string/st_dark_theme" />
 
         <TextView
             android:id="@+id/bt_settings_share"
             style="@style/SettingsItemStyle"
-            android:text="@string/st_share"
+            android:text="@string/st_share_app"
             app:drawableEndCompat="@drawable/ic_share" />
 
         <TextView

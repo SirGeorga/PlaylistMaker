@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <plurals name="plurals_track">
+    <plurals name="plurals_tracks">
         <item quantity="zero"> треков</item>
         <item quantity="one"> трек</item>
         <item quantity="two"> трека</item>
         <item quantity="few"> трека</item>
         <item quantity="many"> треков</item>
         <item quantity="other"> треков</item>
+    </plurals>
+    <plurals name="plurals_tracks_add">
+        <item quantity="zero">%1$d треков</item>
+        <item quantity="one">%1$d трек</item>
+        <item quantity="two">%1$d трека</item>
+        <item quantity="few">%1$d трека</item>
+        <item quantity="many">%1$d треков</item>
+        <item quantity="other">%1$d треков</item>
+    </plurals>
+    <plurals name="plurals_minutes">
+        <item quantity="zero">%1$s минут</item>
+        <item quantity="one">%1$s минута</item>
+        <item quantity="two">%1$s минуты</item>
+        <item quantity="few">%1$s минуты</item>
+        <item quantity="many">%1$s минут</item>
+        <item quantity="other">%1$s минут</item>
     </plurals>
 </resources>

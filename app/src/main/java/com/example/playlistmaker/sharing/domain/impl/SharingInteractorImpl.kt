@@ -1,11 +1,11 @@
 package com.example.playlistmaker.sharing.domain.impl
 
-import com.example.playlistmaker.sharing.domain.api.ExternalNavigator
+import com.example.playlistmaker.sharing.domain.api.ExternalNavigatorRepository
 import com.example.playlistmaker.sharing.domain.api.SharingInteractor
 import com.example.playlistmaker.sharing.domain.model.EmailData
 
 class SharingInteractorImpl(
-    private val externalNavigator: ExternalNavigator,
+    private val externalNavigator: ExternalNavigatorRepository,
     private val shareAppLink: String,
     private val devEmail: String,
     private val mailText: String,

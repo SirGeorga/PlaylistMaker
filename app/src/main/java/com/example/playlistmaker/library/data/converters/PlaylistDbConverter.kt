@@ -49,6 +49,28 @@ class PlaylistDbConverter {
         )
     }
 
+    fun map(trackInPlaylistEntity: TrackInPlaylistEntity): Track {
+        return Track(
+            trackId = trackInPlaylistEntity.trackId,
+            trackName = trackInPlaylistEntity.trackName,
+            artistName = trackInPlaylistEntity.artistName,
+            trackTimeMillis = trackInPlaylistEntity.trackTimeMillis.toString(),
+            artworkUrl100 = trackInPlaylistEntity.artworkUrl100,
+            collectionName = trackInPlaylistEntity.collectionName,
+            releaseDate = trackInPlaylistEntity.releaseDate,
+            primaryGenreName = trackInPlaylistEntity.primaryGenreName,
+            country = trackInPlaylistEntity.country,
+            previewUrl = trackInPlaylistEntity.previewUrl,
+        )
+    }
+
+    fun map(stringList: List<String>): List<ArrayList<Int>> {
+        val list = stringList.map {
+            createTrackIdListFromJson(it)
+        }
+        return list
+    }
+
     private fun createJsonFromTrackIdList(trackIdList: List<Int>): String {
         return Gson().toJson(trackIdList)
     }

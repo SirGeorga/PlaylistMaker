@@ -1,11 +1,9 @@
-package com.example.playlistmaker.search.domain.impl
+package com.example.playlistmaker.search.data
 
 import android.content.Context
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Resource
 import com.example.playlistmaker.library.data.AppDatabase
-import com.example.playlistmaker.search.data.NetworkClient
-import com.example.playlistmaker.search.data.SearchHistory
 import com.example.playlistmaker.search.data.dto.TracksSearchRequest
 import com.example.playlistmaker.search.data.dto.TracksSearchResponse
 import com.example.playlistmaker.search.domain.api.TracksRepository
@@ -27,11 +25,10 @@ class TracksRepositoryImpl(
             }
 
             200 -> {
-                val data = (response as TracksSearchResponse).results.map{
-                    if(getTrackIdList().contains(it.trackId)){
+                val data = (response as TracksSearchResponse).results.map {
+                    if (getTrackIdList().contains(it.trackId)) {
                         it.mapToDomain().copy(isFavourite = true)
-                    }
-                    else{
+                    } else {
                         it.mapToDomain()
                     }
                 }
@@ -64,7 +61,7 @@ class TracksRepositoryImpl(
             artworkUrl100 = artworkUrl100,
             trackId = trackId,
             collectionName = collectionName,
-            releaseDate = releaseDate,
+            releaseDate = releaseDate ?: "",
             primaryGenreName = primaryGenreName,
             country = country,
             previewUrl = previewUrl,
@@ -72,8 +69,8 @@ class TracksRepositoryImpl(
         )
     }
 
-    private suspend fun getTrackIdList(): List<Int>{
+    private suspend fun getTrackIdList(): List<Int> {
         val idList = appDatabase.trackDao().getTracksIdList()
-        return idList?: emptyList()
+        return idList ?: emptyList()
     }
 }

@@ -17,11 +17,9 @@ class PlaylistsViewModel(private val playlistInteractor: PlaylistInteractor) : V
 
     fun fillData() {
         viewModelScope.launch {
-            playlistInteractor
-                .getPlaylists()
-                .collect { list ->
-                    processResult(list)
-                }
+            playlistInteractor.getPlaylists().collect { list ->
+                processResult(list)
+            }
         }
     }
 
@@ -34,6 +32,6 @@ class PlaylistsViewModel(private val playlistInteractor: PlaylistInteractor) : V
     }
 
     fun renderState(playlistsGridState: PlaylistsGridState) {
-        playlistsLiveData.postValue(playlistsGridState)
+        playlistsGridState?.let { playlistsLiveData.postValue(it) }
     }
 }

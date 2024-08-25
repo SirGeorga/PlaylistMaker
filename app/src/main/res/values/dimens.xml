@@ -33,4 +33,11 @@
     <dimen name="dm_4dp">4dp</dimen>
     <dimen name="dm_10dp">10dp</dimen>
     <dimen name="dm_17dp">17dp</dimen>
+    <dimen name="dm_15dp">15dp</dimen>
+    <dimen name="dm_21dp">21dp</dimen>
+    <dimen name="dm_18sp">18sp</dimen>
+    <dimen name="dm_24sp">24sp</dimen>
+    <dimen name="dm_corner_radius">8dp</dimen>
+    <dimen name="dm_corner_radius_small">8dp</dimen>
+    <dimen name="dm_13dp">13dp</dimen>
 </resources>

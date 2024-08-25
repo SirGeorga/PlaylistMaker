@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/yp_light_grey"
+    android:orientation="vertical"
+    tools:context=".library.ui.fragments.ChosenPlaylistFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/Barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="top"
+            app:constraint_referenced_ids="tvPlaylistName" />
+
+
+        <ImageView
+            android:id="@+id/ivPlaylistCover"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="24dp"
+            android:scaleType="centerCrop"
+            app:layout_constrainedHeight="true"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toTopOf="@id/Barrier"
+            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_playlist_placeholder" />
+
+        <ImageButton
+            android:id="@+id/ibBack"
+            android:layout_width="@dimen/margin_24"
+            android:layout_height="@dimen/margin_24"
+            android:layout_marginStart="@dimen/dm_16dp"
+            android:layout_marginTop="@dimen/dm_16dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_arrow_back"
+            app:tint="@color/yp_black_background" />
+
+        <TextView
+            android:id="@+id/tvPlaylistName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="384dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textAllCaps="false"
+            android:textColor="@color/yp_black_background"
+            android:textSize="@dimen/dm_24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Название" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            style="@style/PlaylistDetailsStyle"
+            android:layout_width="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:lines="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvPlaylistName"
+            app:layout_constraintTop_toBottomOf="@id/tvPlaylistName"
+            tools:text="Описание" />
+
+        <RelativeLayout
+            android:id="@+id/rlPlaylistDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="left"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvPlaylistName"
+            app:layout_constraintTop_toBottomOf="@id/tvDescription">
+
+            <TextView
+                android:id="@+id/tvMinutes"
+                style="@style/PlaylistDetailsStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/ivDot"
+                tools:text="10 минут" />
+
+            <ImageView
+                android:id="@+id/ivDot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginHorizontal="@dimen/dm_4dp"
+                android:layout_toStartOf="@id/tvNumberOfTracks"
+                android:src="@drawable/ic_dot"
+                app:tint="@color/yp_black_background" />
+
+            <TextView
+                android:id="@+id/tvNumberOfTracks"
+                style="@style/PlaylistDetailsStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                tools:text="10 треков" />
+
+        </RelativeLayout>
+
+        <ImageButton
+            android:id="@+id/ibShare"
+            android:layout_width="@dimen/margin_24"
+            android:layout_height="@dimen/margin_24"
+            android:layout_marginTop="16dp"
+            android:background="@android:color/transparent"
+            android:foreground="?attr/selectableItemBackground"
+            app:layout_constraintStart_toStartOf="@id/tvPlaylistName"
+            app:layout_constraintTop_toBottomOf="@id/rlPlaylistDetails"
+            app:srcCompat="@drawable/ic_share"
+            app:tint="@color/yp_items_black" />
+
+        <ImageButton
+            android:id="@+id/ibMore"
+            android:layout_width="@dimen/margin_24"
+            android:layout_height="@dimen/margin_24"
+            android:layout_marginStart="@dimen/dm_16dp"
+            android:background="@android:color/transparent"
+            android:foreground="?attr/selectableItemBackground"
+            app:layout_constraintBottom_toBottomOf="@id/ibShare"
+            app:layout_constraintStart_toEndOf="@id/ibShare"
+            app:srcCompat="@drawable/ic_more" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <LinearLayout
+        android:id="@+id/llBottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bottom_sheet"
+        android:orientation="vertical"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="96dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/rounder" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvBottomSheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dm_13dp"
+            android:layout_marginEnd="@dimen/dm_20dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="7"
+            tools:listitem="@layout/track_item" />
+
+        <TextView
+            android:id="@+id/tvPlaceholderText"
+            style="@style/PlaylistBottomSheetTitleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="15dp"
+            android:gravity="center"
+            android:text="@string/st_no_tracks_in_playlist" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/vOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/llBottomSheetShare"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bottom_sheet"
+        android:orientation="vertical"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="383dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/rounder" />
+
+        <include
+            android:id="@+id/inner_playlist_item"
+            layout="@layout/playlist_bottomsheet_item" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/flBottomSheetShare"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground">
+
+                <TextView
+                    style="@style/PlaylistBottomSheetShareStyle"
+                    android:layout_marginVertical="@dimen/dm_21dp"
+                    android:layout_marginStart="@dimen/dm_15dp"
+                    android:text="@string/st_share" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/flBottomSheetEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground">
+
+                <TextView
+                    style="@style/PlaylistBottomSheetShareStyle"
+                    android:layout_marginVertical="@dimen/dm_21dp"
+                    android:layout_marginStart="@dimen/dm_15dp"
+                    android:text="@string/st_edit_playlist" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/flBottomSheetDelete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground">
+
+                <TextView
+                    style="@style/PlaylistBottomSheetShareStyle"
+                    android:layout_marginVertical="@dimen/dm_21dp"
+                    android:layout_marginStart="@dimen/dm_15dp"
+                    android:text="@string/st_delete_playlist" />
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

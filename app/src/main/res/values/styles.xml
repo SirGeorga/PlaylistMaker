@@ -193,4 +193,29 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="PlaylistBottomSheetShareStyle">
+        <item name="android:textColor">@color/yp_black_background</item>
+        <item name="android:textSize">@dimen/settings_content_text_size_16sp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="PlaylistBottomSheetTitleStyle">
+        <item name="android:textColor">@color/yp_black_background</item>
+        <item name="android:textSize">@dimen/dm_19sp</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+    </style>
+
+    <style name="PlaylistDetailsStyle">
+        <item name="android:textColor">@color/yp_black_background</item>
+        <item name="android:textSize">@dimen/dm_18sp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
 </resources>

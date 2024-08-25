@@ -16,7 +16,7 @@
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
         app:shapeAppearanceOverlay="@style/Circular"
-        tools:src="@drawable/ic_placeholder" />
+        tools:src="@drawable/ic_playlist_placeholder" />
 
     <TextView
         android:id="@+id/titlePlayist"

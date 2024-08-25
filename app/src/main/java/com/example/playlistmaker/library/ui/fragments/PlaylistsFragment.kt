@@ -4,14 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.debounce
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
@@ -29,19 +26,15 @@ class PlaylistsFragment : Fragment() {
     }
 
     private val playlistAdapter = PlaylistAdapter {
+        onPlaylistClickDebounce(it)
     }
     private lateinit var onPlaylistClickDebounce: (Playlist) -> Unit
     private val playlistsViewModel by viewModel<PlaylistsViewModel>()
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
-    private lateinit var playlistRecyclerView: RecyclerView
-    private lateinit var newPlaylist: Button
-    private lateinit var placeholderIconPlaylists: ImageView
-    private lateinit var placeholderMessagePlaylists: TextView
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
         return binding.root
@@ -51,31 +44,28 @@ class PlaylistsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         onPlaylistClickDebounce = debounce<Playlist>(
-            SearchFragment.SEARCH_DEBOUNCE_DELAY,
-            viewLifecycleOwner.lifecycleScope,
-            false
+            SearchFragment.SEARCH_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
         ) { playlist ->
-
+            findNavController().navigate(
+                R.id.action_libraryFragment_to_chosenPlaylistFragment,
+                ChosenPlaylistFragment.createArgs(playlist.playlistId)
+            )
         }
 
-        playlistRecyclerView = binding.playlistRecyclerView
-        newPlaylist = binding.btNewPlaylist
-        placeholderIconPlaylists = binding.ivPlaylistsPlaceholderImg
-        placeholderMessagePlaylists = binding.tvPlaylistsPlaceholderTxt
 
-        playlistRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        playlistRecyclerView.adapter = playlistAdapter
-        placeholderIconPlaylists.setImageResource(R.drawable.ic_search_no_item)
-        placeholderMessagePlaylists.setText(R.string.st_playlists_empty)
+        binding.playlistRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.playlistRecyclerView.adapter = playlistAdapter
+        binding.ivPlaylistsPlaceholderImg.setImageResource(R.drawable.ic_search_no_item)
+        binding.tvPlaylistsPlaceholderTxt.setText(R.string.st_playlists_empty)
 
 
-        newPlaylist.visibility = View.VISIBLE
+        binding.btNewPlaylist.isVisible = true
 
         playlistsViewModel.observePlaylists().observe(viewLifecycleOwner) {
             render(it)
         }
 
-        newPlaylist.setOnClickListener {
+        binding.btNewPlaylist.setOnClickListener {
             findNavController().navigate(R.id.action_libraryFragment_to_newPlaylistFragment)
         }
     }
@@ -88,15 +78,15 @@ class PlaylistsFragment : Fragment() {
     }
 
     private fun showEmpty() {
-        placeholderIconPlaylists.visibility = View.VISIBLE
-        placeholderMessagePlaylists.visibility = View.VISIBLE
-        playlistRecyclerView.visibility = View.GONE
+        binding.ivPlaylistsPlaceholderImg.isVisible = true
+        binding.tvPlaylistsPlaceholderTxt.isVisible = true
+        binding.playlistRecyclerView.isVisible = false
     }
 
     private fun showContent(playlists: List<Playlist>) {
-        placeholderIconPlaylists.visibility = View.GONE
-        placeholderMessagePlaylists.visibility = View.GONE
-        playlistRecyclerView.visibility = View.VISIBLE
+        binding.ivPlaylistsPlaceholderImg.isVisible = false
+        binding.tvPlaylistsPlaceholderTxt.isVisible = false
+        binding.playlistRecyclerView.isVisible = true
         playlistAdapter.setPlaylistsGrid(playlists)
     }
 

@@ -70,7 +70,7 @@ class ChosenPlaylistViewModel(private val playlistInteractor: PlaylistInteractor
 
     fun sharePlaylist(context: Context) {
         val message = makeMessage(currentPlaylist, currentTrackList, context)
-        playlistInteractor.sharePlaylist(message, context)
+        playlistInteractor.sharePlaylist(message)
     }
 
     private fun makeMessage(playlist: Playlist, trackList: List<Track>, context: Context): String {

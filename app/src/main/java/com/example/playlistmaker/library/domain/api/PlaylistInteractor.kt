@@ -1,6 +1,5 @@
 package com.example.playlistmaker.library.domain.api
 
-import android.content.Context
 import com.example.playlistmaker.search.domain.model.Playlist
 import com.example.playlistmaker.search.domain.model.Track
 import kotlinx.coroutines.flow.Flow
@@ -12,7 +11,7 @@ interface PlaylistInteractor {
 
     fun getPlaylists(): Flow<List<Playlist>>
 
-    fun sharePlaylist(message: String, context: Context)
+    fun sharePlaylist(message: String?)
 
     suspend fun deletePlaylist(playlist: Playlist)
 

@@ -23,7 +23,7 @@ val interactorModule = module {
     }
 
     single<PlaylistInteractor> {
-        PlaylistInteractorImpl(get())
+        PlaylistInteractorImpl(get(), get())
     }
 
     single<SharingInteractor> {

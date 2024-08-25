@@ -16,6 +16,15 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
         context.startActivity(chooserIntent)
     }
 
+    override fun sharePlaylist(message: String?) {
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.type = "text/plain"
+        shareIntent.putExtra(Intent.EXTRA_TEXT, message)
+        val chooserIntent = Intent.createChooser(shareIntent, null)
+        chooserIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        context.startActivity(chooserIntent)
+    }
+
     override fun openLink(agreement: String?) {
         val agreementIntent = Intent(Intent.ACTION_VIEW)
         agreementIntent.data = Uri.parse(agreement)

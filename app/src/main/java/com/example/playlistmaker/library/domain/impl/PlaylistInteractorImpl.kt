@@ -1,15 +1,16 @@
 package com.example.playlistmaker.library.domain.impl
 
-import android.content.Context
-import android.content.Intent
 import com.example.playlistmaker.library.domain.api.PlaylistInteractor
 import com.example.playlistmaker.library.domain.api.PlaylistRepository
 import com.example.playlistmaker.search.domain.model.Playlist
 import com.example.playlistmaker.search.domain.model.Track
+import com.example.playlistmaker.sharing.domain.api.ExternalNavigator
 import kotlinx.coroutines.flow.Flow
 
-class PlaylistInteractorImpl(private val playlistRepository: PlaylistRepository) :
-    PlaylistInteractor {
+class PlaylistInteractorImpl(
+    private val playlistRepository: PlaylistRepository,
+    private val externalNavigator: ExternalNavigator
+) : PlaylistInteractor {
 
     override suspend fun createPlaylist(playlist: Playlist) {
         playlistRepository.createPlaylist(playlist)
@@ -23,13 +24,8 @@ class PlaylistInteractorImpl(private val playlistRepository: PlaylistRepository)
         return playlistRepository.getPlaylists()
     }
 
-    override fun sharePlaylist(message: String, context: Context) {
-        val shareIntent = Intent(Intent.ACTION_SEND)
-        shareIntent.type = "text/plain"
-        shareIntent.putExtra(Intent.EXTRA_TEXT, message)
-        val chooserIntent = Intent.createChooser(shareIntent, null)
-        chooserIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        context.startActivity(chooserIntent)
+    override fun sharePlaylist(message: String?) {
+        externalNavigator.sharePlaylist(message)
     }
 
     override suspend fun updatePlaylist(playlist: Playlist) {

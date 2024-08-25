@@ -27,11 +27,10 @@ class TracksRepositoryImpl(
             }
 
             200 -> {
-                val data = (response as TracksSearchResponse).results.map{
-                    if(getTrackIdList().contains(it.trackId)){
+                val data = (response as TracksSearchResponse).results.map {
+                    if (getTrackIdList().contains(it.trackId)) {
                         it.mapToDomain().copy(isFavourite = true)
-                    }
-                    else{
+                    } else {
                         it.mapToDomain()
                     }
                 }
@@ -64,7 +63,7 @@ class TracksRepositoryImpl(
             artworkUrl100 = artworkUrl100,
             trackId = trackId,
             collectionName = collectionName,
-            releaseDate = releaseDate,
+            releaseDate = releaseDate ?: "",
             primaryGenreName = primaryGenreName,
             country = country,
             previewUrl = previewUrl,
@@ -72,8 +71,8 @@ class TracksRepositoryImpl(
         )
     }
 
-    private suspend fun getTrackIdList(): List<Int>{
+    private suspend fun getTrackIdList(): List<Int> {
         val idList = appDatabase.trackDao().getTracksIdList()
-        return idList?: emptyList()
+        return idList ?: emptyList()
     }
 }

@@ -43,7 +43,7 @@ class EditPlaylistFragment : NewPlaylistFragment() {
                 binding.ivNewPlaylistImage.background = null
 
                 Glide.with(this).load(it.imageFilePath).centerCrop()
-                    .placeholder(R.drawable.ic_placeholder)
+                    .placeholder(R.drawable.ic_playlist_placeholder)
                     .transform(RoundedCorners(this.resources.getDimensionPixelSize(R.dimen.dm_corner_radius)))
                     .into(binding.ivNewPlaylistImage)
             } else findNavController().popBackStack()

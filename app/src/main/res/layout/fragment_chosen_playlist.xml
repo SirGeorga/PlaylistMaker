@@ -33,7 +33,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_placeholder" />
+            tools:src="@drawable/ic_playlist_placeholder" />
 
         <ImageButton
             android:id="@+id/ibBack"
@@ -164,6 +164,8 @@
             android:id="@+id/rvBottomSheet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dm_13dp"
+            android:layout_marginEnd="@dimen/dm_20dp"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="7"

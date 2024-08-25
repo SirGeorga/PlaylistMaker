@@ -182,7 +182,7 @@ open class NewPlaylistFragment : Fragment() {
     }
 
     fun setPlaceholder(): String {
-        binding.ivNewPlaylistImage.setImageResource(R.drawable.ic_placeholder)
+        binding.ivNewPlaylistImage.setImageResource(R.drawable.ic_playlist_placeholder)
         return ""
     }
 }

@@ -4,12 +4,12 @@ import com.example.playlistmaker.library.domain.api.PlaylistInteractor
 import com.example.playlistmaker.library.domain.api.PlaylistRepository
 import com.example.playlistmaker.search.domain.model.Playlist
 import com.example.playlistmaker.search.domain.model.Track
-import com.example.playlistmaker.sharing.domain.api.ExternalNavigator
+import com.example.playlistmaker.sharing.domain.api.ExternalNavigatorRepository
 import kotlinx.coroutines.flow.Flow
 
 class PlaylistInteractorImpl(
     private val playlistRepository: PlaylistRepository,
-    private val externalNavigator: ExternalNavigator
+    private val externalNavigator: ExternalNavigatorRepository
 ) : PlaylistInteractor {
 
     override suspend fun createPlaylist(playlist: Playlist) {

@@ -1,7 +1,6 @@
-package com.example.playlistmaker.player.domain.impl
+package com.example.playlistmaker.player.data
 
 import android.media.MediaPlayer
-import com.example.playlistmaker.player.data.TrackTimeFormat
 import com.example.playlistmaker.player.domain.api.PlayerRepository
 
 class PlayerRepositoryImpl : PlayerRepository {

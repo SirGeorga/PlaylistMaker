@@ -21,7 +21,7 @@ class PlaylistViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
     fun bind(item: Playlist) {
 
-        Glide.with(itemView).load(item.imageFilePath).placeholder(R.drawable.ic_placeholder)
+        Glide.with(itemView).load(item.imageFilePath).placeholder(R.drawable.ic_playlist_placeholder)
             .centerCrop()
             .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.search_bar_corner_radius_8dp)))
             .into(playlistImage)

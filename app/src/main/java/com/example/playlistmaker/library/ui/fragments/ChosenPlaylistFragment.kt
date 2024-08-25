@@ -94,12 +94,12 @@ class ChosenPlaylistFragment : Fragment() {
                     }
                     showTracklist(it.numberOfTracks)
                     Glide.with(this@ChosenPlaylistFragment).load(it.imageFilePath).centerCrop()
-                        .placeholder(R.drawable.ic_placeholder)
+                        .placeholder(R.drawable.ic_playlist_placeholder)
                         .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.dm_corner_radius)))
                         .into(binding.ivPlaylistCover)
 
                     Glide.with(this@ChosenPlaylistFragment).load(it.imageFilePath).centerCrop()
-                        .placeholder(R.drawable.ic_placeholder)
+                        .placeholder(R.drawable.ic_playlist_placeholder)
                         .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.dm_corner_radius_small)))
                         .into(binding.innerPlaylistItem.playlistImage)
                 }

@@ -1,12 +1,12 @@
-package com.example.playlistmaker.sharing.domain.impl
+package com.example.playlistmaker.sharing.data
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import com.example.playlistmaker.sharing.domain.api.ExternalNavigator
+import com.example.playlistmaker.sharing.domain.api.ExternalNavigatorRepository
 import com.example.playlistmaker.sharing.domain.model.EmailData
 
-class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
+class ExternalNavigatorRepositoryImpl(private val context: Context) : ExternalNavigatorRepository {
     override fun shareLink(link: String?) {
         val shareIntent = Intent(Intent.ACTION_SEND)
         shareIntent.type = "text/plain"

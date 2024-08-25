@@ -1,6 +1,5 @@
-package com.example.playlistmaker.library.domain.impl
+package com.example.playlistmaker.library.data
 
-import com.example.playlistmaker.library.data.AppDatabase
 import com.example.playlistmaker.library.data.converters.PlaylistDbConverter
 import com.example.playlistmaker.library.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.library.data.db.entity.TrackInPlaylistEntity

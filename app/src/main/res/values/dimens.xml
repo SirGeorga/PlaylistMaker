@@ -39,4 +39,5 @@
     <dimen name="dm_24sp">24sp</dimen>
     <dimen name="dm_corner_radius">8dp</dimen>
     <dimen name="dm_corner_radius_small">8dp</dimen>
+    <dimen name="dm_13dp">13dp</dimen>
 </resources>

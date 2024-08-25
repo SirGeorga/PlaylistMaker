@@ -5,11 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.App.Companion.scope
 import com.example.playlistmaker.R
 import com.example.playlistmaker.library.domain.api.PlaylistInteractor
 import com.example.playlistmaker.search.domain.model.Playlist
 import com.example.playlistmaker.search.domain.model.Track
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -19,6 +19,7 @@ class ChosenPlaylistViewModel(private val playlistInteractor: PlaylistInteractor
     var currentTrack: Track? = null
     var currentPlaylist = Playlist()
     var currentTrackList = mutableListOf<Track>()
+    val scope = GlobalScope
 
     fun getPlaylistById(playlistId: Int) {
         viewModelScope.launch {

@@ -1,4 +1,4 @@
-package com.example.playlistmaker.library.data.db
+package com.example.playlistmaker.library.domain.impl
 
 import com.example.playlistmaker.library.data.AppDatabase
 import com.example.playlistmaker.library.data.converters.PlaylistDbConverter
@@ -46,10 +46,10 @@ class PlaylistRepositoryImpl(
     override suspend fun deleteTrackFromPlaylist(trackId: Int, playlist: Playlist) {
         playlist.trackIdList.remove(trackId)
         appDatabase.playlistDao().updatePlaylist(
-                playlistDbConverter.map(
-                    playlist.copy(numberOfTracks = playlist.numberOfTracks - 1)
-                )
+            playlistDbConverter.map(
+                playlist.copy(numberOfTracks = playlist.numberOfTracks - 1)
             )
+        )
         deleteTrackInPlaylistFromDb(trackId)
     }
 
@@ -72,10 +72,10 @@ class PlaylistRepositoryImpl(
     override suspend fun updateTrackListInPlaylist(track: Track, playlist: Playlist) {
         playlist.trackIdList.add(track.trackId)
         appDatabase.playlistDao().updatePlaylist(
-                playlistDbConverter.map(
-                    playlist.copy(numberOfTracks = playlist.numberOfTracks + 1)
-                )
+            playlistDbConverter.map(
+                playlist.copy(numberOfTracks = playlist.numberOfTracks + 1)
             )
+        )
         addTrackInPlaylistToDb(track)
     }
 

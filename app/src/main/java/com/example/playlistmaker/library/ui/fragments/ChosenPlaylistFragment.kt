@@ -35,10 +35,9 @@ class ChosenPlaylistFragment : Fragment() {
 
     companion object {
         private const val PLAYLISTID = "playlistId"
-        fun createArgs(playlistId: Int): Bundle =
-            bundleOf(
-                PLAYLISTID to playlistId
-            )
+        fun createArgs(playlistId: Int): Bundle = bundleOf(
+            PLAYLISTID to playlistId
+        )
     }
 
     private val trackAdapter = ChosenPlaylistTrackAdapter({ track ->
@@ -53,8 +52,7 @@ class ChosenPlaylistFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentChosenPlaylistBinding.inflate(inflater, container, false)
 
@@ -66,9 +64,7 @@ class ChosenPlaylistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         onTrackClickDebounce = debounce<Track>(
-            SearchFragment.SEARCH_DEBOUNCE_DELAY,
-            viewLifecycleOwner.lifecycleScope,
-            false
+            SearchFragment.SEARCH_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
         ) { track ->
             findNavController().navigate(
                 R.id.action_chosenPlaylistFragment_to_playerFragment,
@@ -83,31 +79,30 @@ class ChosenPlaylistFragment : Fragment() {
 
         chosenPlaylistViewModel.observeChosenPlaylist().observe(viewLifecycleOwner) {
             if (it !== null) {
-                binding.tvPlaylistName.text = it.playlistName
-                binding.tvDescription.text = it.playlistDescription
-                binding.tvNumberOfTracks.text = resources.getQuantityString(
-                    R.plurals.plurals_tracks_add,
-                    it.numberOfTracks,
-                    it.numberOfTracks
-                )
-                binding.innerPlaylistItem.playlistName.text = it.playlistName
-                binding.innerPlaylistItem.numberOfTracks.text = it.numberOfTracks.toString()
-                binding.innerPlaylistItem.tracks.text =
-                    this.resources.getQuantityString(R.plurals.plurals_tracks, it.numberOfTracks)
-                showTracklist(it.numberOfTracks)
-                Glide.with(this)
-                    .load(it.imageFilePath)
-                    .centerCrop()
-                    .placeholder(R.drawable.ic_placeholder)
-                    .transform(RoundedCorners(this.resources.getDimensionPixelSize(R.dimen.dm_corner_radius)))
-                    .into(binding.ivPlaylistCover)
+                with(binding) {
+                    tvPlaylistName.text = it.playlistName
+                    tvDescription.text = it.playlistDescription
+                    tvNumberOfTracks.text = resources.getQuantityString(
+                        R.plurals.plurals_tracks_add, it.numberOfTracks, it.numberOfTracks
+                    )
+                    with(innerPlaylistItem) {
+                        playlistName.text = it.playlistName
+                        numberOfTracks.text = it.numberOfTracks.toString()
+                        tracks.text = resources.getQuantityString(
+                            R.plurals.plurals_tracks, it.numberOfTracks
+                        )
+                    }
+                    showTracklist(it.numberOfTracks)
+                    Glide.with(this@ChosenPlaylistFragment).load(it.imageFilePath).centerCrop()
+                        .placeholder(R.drawable.ic_placeholder)
+                        .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.dm_corner_radius)))
+                        .into(binding.ivPlaylistCover)
 
-                Glide.with(this)
-                    .load(it.imageFilePath)
-                    .centerCrop()
-                    .placeholder(R.drawable.ic_placeholder)
-                    .transform(RoundedCorners(this.resources.getDimensionPixelSize(R.dimen.dm_corner_radius_small)))
-                    .into(binding.innerPlaylistItem.playlistImage)
+                    Glide.with(this@ChosenPlaylistFragment).load(it.imageFilePath).centerCrop()
+                        .placeholder(R.drawable.ic_placeholder)
+                        .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.dm_corner_radius_small)))
+                        .into(binding.innerPlaylistItem.playlistImage)
+                }
             } else findNavController().popBackStack()
         }
 
@@ -186,24 +181,23 @@ class ChosenPlaylistFragment : Fragment() {
     private fun showConfirmDialogDeletePlaylist() {
         val stringDelete =
             requireContext().resources.getString(R.string.st_do_you_want_to_delete_playlist)
-        val confirmDialogDeletePlaylistBuilder = MaterialAlertDialogBuilder(requireContext())
-            .setTitle("$stringDelete \u00AB${chosenPlaylistViewModel.currentPlaylist.playlistName}\u00BB?")
-            .setNegativeButton(R.string.st_no) { dialog, which ->
-            }.setPositiveButton(R.string.st_yes) { dialog, which ->
-                chosenPlaylistViewModel
-                    .deletePlaylist()
+        val confirmDialogDeletePlaylistBuilder =
+            MaterialAlertDialogBuilder(requireContext()).setTitle("$stringDelete \u00AB${chosenPlaylistViewModel.currentPlaylist.playlistName}\u00BB?")
+                .setNegativeButton(R.string.st_no) { dialog, which ->
+                }.setPositiveButton(R.string.st_yes) { dialog, which ->
+                    chosenPlaylistViewModel.deletePlaylist()
 
-            }
+                }
         confirmDialogDeletePlaylistBuilder.show()
     }
 
     private fun showConfirmDialogDeleteTrack() {
-        val confirmDialogDeleteTrackBuilder = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.st_do_you_want_to_delete_track)
-            .setNegativeButton(R.string.st_no) { dialog, which ->
-            }.setPositiveButton(R.string.st_yes) { dialog, which ->
-                chosenPlaylistViewModel.deleteTrackFromPlaylist()
-            }
+        val confirmDialogDeleteTrackBuilder =
+            MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.st_do_you_want_to_delete_track)
+                .setNegativeButton(R.string.st_no) { dialog, which ->
+                }.setPositiveButton(R.string.st_yes) { dialog, which ->
+                    chosenPlaylistViewModel.deleteTrackFromPlaylist()
+                }
         confirmDialogDeleteTrackBuilder.show()
     }
 
@@ -215,12 +209,10 @@ class ChosenPlaylistFragment : Fragment() {
     private fun sharePlaylist() {
         if (chosenPlaylistViewModel.currentPlaylist.numberOfTracks == 0) {
             Toast.makeText(
-                requireContext(),
-                R.string.st_theres_no_track_to_share, Toast.LENGTH_LONG
+                requireContext(), R.string.st_theres_no_track_to_share, Toast.LENGTH_LONG
             ).show()
         } else {
-            chosenPlaylistViewModel
-                .sharePlaylist(requireContext())
+            chosenPlaylistViewModel.sharePlaylist(requireContext())
         }
     }
 
@@ -239,9 +231,7 @@ class ChosenPlaylistFragment : Fragment() {
         val totalTimeString =
             SimpleDateFormat("mm", Locale.getDefault()).format(totalTimeLong.toInt())
         return context.resources.getQuantityString(
-            R.plurals.plurals_minutes,
-            totalTimeString.toInt(),
-            totalTimeString
+            R.plurals.plurals_minutes, totalTimeString.toInt(), totalTimeString
         )
     }
 }
